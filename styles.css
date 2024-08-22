@@ -47,7 +47,11 @@ body {
 .profile-container {
     margin-top: 20px;
 }
+.h1{
+    font-size: 50px;
+    color: rgb(255, 255, 255);
 
+}
 .profile-pic {
     width: 200px;
     height: 200px;
@@ -71,6 +75,7 @@ body {
     font-size: 20px;
     transition: transform 0.3s, opacity 0.3s;
 }
+
 .btn-custom {
     background-color: #5e3e79; 
     border: none;
@@ -107,19 +112,16 @@ body {
 
 @keyframes fly {
     0% {
-        transform: translateY(-50px);
-        opacity: 0;
+        transform: translateX(-30px);
     }
     50% {
         transform: translateY(0);
-        opacity: 1;
     }
     100% {
-        transform: translateY(-50px);
-        opacity: 0;
+        transform: translateX(-30px);
     }
 }
 
 .right-section h1 {
-    animation: fly 2s infinite;
+    animation: fly 3s infinite;
 }
