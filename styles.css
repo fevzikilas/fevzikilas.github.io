@@ -1,33 +1,33 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-     background-image: url("https://i.giphy.com/73WrT6n6yoVfq.webp");
-    background-repeat: no-repeat;
-    background-position: center;
+    font-family:           Arial, sans-serif;
+    margin:                0;
+    padding:               0;
+    display:               flex;
+    justify-content:       center;
+    align-items:           center;
+    height:                100vh;
+    background-image:      url("https://i.giphy.com/73WrT6n6yoVfq.webp");
+    background-repeat:     no-repeat;
+    background-position:   center;
     background-attachment: fixed;
-    background-size: cover; 
+    background-size:       cover; 
 }
 .container {
-    display: flex;
-    width: 80%;
-    height: 80%;
+    display:       flex;
+    width:         80%;
+    height:        80%;
     border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    overflow:      hidden;
+    box-shadow:    0 0 10px rgba(0, 0, 0, 0.2);
     }
 
 .left-section,
 .right-section {
-    flex: 1;
-    display: flex;
+    flex:            1;
+    display:         flex;
     justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    align-items:     center;
+    overflow:        hidden;
 }
 
 .left-section {
