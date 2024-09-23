@@ -18,8 +18,7 @@ body {
     height:        80%;
     border-radius: 8px;
     overflow:      hidden;
-    box-shadow:    0 0 10px rgba(0, 0, 0, 0.2);
-    }
+}
 
 .left-section,
 .right-section {
@@ -42,21 +41,43 @@ body {
 .right-section {
     flex-direction: column;
     text-align: center;
+    height: 100%;
+    overflow: hidden; 
+
+.scrollable-content {
+    overflow-y: auto; 
+    height: 100%; 
+    padding: 20px; 
 }
+.scrollable-content::-webkit-scrollbar {
+    width: 12px;
+}
+
+
+.scrollable-content {
+    scrollbar-width: thin; 
+    scrollbar-color: #ffffff62 #f1f1f100; 
+}
+
 
 .profile-container {
     margin-top: 20px;
 }
-.h1{
+
+.h1 {
     font-size: 50px;
     color: rgb(255, 255, 255);
-
 }
+
 .profile-pic {
     width: 200px;
     height: 200px;
     border-radius: 50%;
     border: 3px solid #000000; 
+}
+
+.links {
+    margin-top: 20px;
 }
 
 .links a {
