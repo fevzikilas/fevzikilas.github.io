@@ -7,6 +7,23 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+        background-size: cover;
+        transition: background-image 1s ease-in-out;
+    }
+</style>
 <body>
     <div class="container">
         <div class="left-section">
@@ -39,8 +56,31 @@
         </div>
 
     </div>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        const images = [
+            "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/12cbe8a4-f55c-4b40-85bb-d8e1405e7b84/dfvdbzc-ea86506e-08ec-4ce6-92c7-32ea7f5189f6.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzEyY2JlOGE0LWY1NWMtNGI0MC04NWJiLWQ4ZTE0MDVlN2I4NFwvZGZ2ZGJ6Yy1lYTg2NTA2ZS0wOGVjLTRjZTYtOTJjNy0zMmVhN2Y1MTg5ZjYuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.r_PHuQ6IIqWEqPcQy6fL6NDW41Vmr4Gx8HcqE5PyK8U",
+            "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGdtbmZqNjA4YzNuZ2NrMm53cnRha3gzMXNubTdsb3c3NDNsenY1bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jISqhkP7xZWVYNbjTr/giphy.gif",
+            "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/12cbe8a4-f55c-4b40-85bb-d8e1405e7b84/dg3u7hq-c1a76bed-89de-4294-9621-bb4ec5928066.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzEyY2JlOGE0LWY1NWMtNGI0MC04NWJiLWQ4ZTE0MDVlN2I4NFwvZGczdTdocS1jMWE3NmJlZC04OWRlLTQyOTQtOTYyMS1iYjRlYzU5MjgwNjYuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.rYkG0BxIeofIeDrbwyDJge1i8l4MDCGA1ZxtoHva4nU",
+            "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b5a2cac9-9f3d-469b-8d11-539e0b2ecc52/dhifsc9-3bc56f22-4990-494a-995b-677c921f8b85.png/v1/fill/w_1032,h_774,q_70,strp/_sold__anime_furry_by_mattayah0_dhifsc9-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2I1YTJjYWM5LTlmM2QtNDY5Yi04ZDExLTUzOWUwYjJlY2M1MlwvZGhpZnNjOS0zYmM1NmYyMi00OTkwLTQ5NGEtOTk1Yi02NzdjOTIxZjhiODUucG5nIiwiaGVpZ2h0IjoiPD05NjAiLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS53YXRlcm1hcmsiXSwid21rIjp7InBhdGgiOiJcL3dtXC9iNWEyY2FjOS05ZjNkLTQ2OWItOGQxMS01MzllMGIyZWNjNTJcL21hdHRheWFoMC00LnBuZyIsIm9wYWNpdHkiOjk1LCJwcm9wb3J0aW9ucyI6MC40NSwiZ3Jhdml0eSI6ImNlbnRlciJ9fQ.TAFyhFVjl_YlyvGCgJvcDPWXsCJrMrE-C0LlYqzTKQY",
+            "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/12cbe8a4-f55c-4b40-85bb-d8e1405e7b84/dacbjh5-9642d41b-8f03-4d32-a07c-b13c06f206f8.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzEyY2JlOGE0LWY1NWMtNGI0MC04NWJiLWQ4ZTE0MDVlN2I4NFwvZGFjYmpoNS05NjQyZDQxYi04ZjAzLTRkMzItYTA3Yy1iMTNjMDZmMjA2ZjguZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.9bXbpd_v-v3nJoRm9Z0cDFX8N5GIbGD_fqRaPUpg6iI",
+            "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/007eaef7-0939-4e29-a008-3740b481a67a/dekeq02-2376bdb3-d6dd-45f7-9e76-5ce0e95aa879.png/v1/fill/w_1264,h_632,q_70,strp/foggy_forest_by_eagersprout_dekeq02-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvMDA3ZWFlZjctMDkzOS00ZTI5LWEwMDgtMzc0MGI0ODFhNjdhXC9kZWtlcTAyLTIzNzZiZGIzLWQ2ZGQtNDVmNy05ZTc2LTVjZTBlOTVhYTg3OS5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.-LwpF-V70t8ql7cwPsKt6vO_OZcOZiNjnFuRkA_9DGU",
+            "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3a8f25dd-0da0-428b-8db2-840fe85708b8/db73c8l-eaa30ef1-05e1-4251-a4ff-fafaaa996f81.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzNhOGYyNWRkLTBkYTAtNDI4Yi04ZGIyLTg0MGZlODU3MDhiOFwvZGI3M2M4bC1lYWEzMGVmMS0wNWUxLTQyNTEtYTRmZi1mYWZhYWE5OTZmODEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.6kttMjmZuzE4Oda_NytwG1acYFEUSkvAM3gUg6Z7lNY       ",
+        ];
+    
+        let index = 0;
+    
+        function changeBackground() {
+            document.body.style.backgroundImage = `url('${images[index]}')`;
+            index = (index + 1) % images.length;
+        }
+    
+        changeBackground();
+        setInterval(changeBackground, 5000) 
+    </script>
 </body>
 </html>
