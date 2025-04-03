@@ -563,7 +563,7 @@
           this.y = y;
           this.r = Math.floor(Math.random() * 5) + 1;
           this.maxLinks = 2;
-          this.speed = 1; // Fixed speed
+          this.speed = 0.5; 
           this.a = .5;
           this.aReduction = .005;
           this.color = baloncuk + this.a + ")";
@@ -633,13 +633,11 @@
           mouseX,
           mouseY,
           stars = [],
-          initStarsPopulation = 80,
+          initStarsPopulation = 120,
           dots = [],
           dotsMinDist = 2,
           params = {
-              maxDistFromCursor: 20,
-              dotsSpeed: 10,
-              backgroundSpeed: 10
+              maxDistFromCursor: 50,
           };
 
   function setCanvasSize() {
@@ -649,7 +647,6 @@
       canvas.setAttribute("width", WIDTH);
       canvas.setAttribute("height", HEIGHT);
 
-      params.dotsSpeed = 10;
       params.backgroundSpeed = 10;
   }
 
