@@ -1,794 +1,870 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-      :root {
-          --dynamic-bg-color: black;
-          --text-color: #000000;
-          --text-color-2: #97979738;
-          --theme-toggle-bg: rgba(255,255,255,0.2);
-          --theme-toggle-hover: rgba(255,255,255,0.3);
-          --card-bg-color: rgba(0, 0, 0, 0.8);
-          --card-hover-bg: rgba(255, 255, 255, 0.1);
-          --accent-color: #000000;
-          --section-padding: 6rem;
-          --border-radius: 8px;
-      }
-
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          transition: all 0.3s ease;
-          user-select: none;
-          font-family: 'Poppins', sans-serif;
-          scrollbar-width: none; /* Firefox */
-          -ms-overflow-style: none; /* IE and Edge */
-      }
-      
-      *::-webkit-scrollbar {
-          display: none; /* Chrome, Safari, Opera */
-      }
-
-      body {
-          color: var(--text-color-2);
-          font-size: 16px;
-          line-height: 1.6;
-          overflow: hidden;
-          background-color: #121212;
-          perspective: 1500px;
-          height: 100vh;
-          width: 100vw;
-      }
-
-      main {
-          height: 100vh;
-          width: 100vw;
-          display: flex;
-          overflow: hidden;
-      }
-
-      .background {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          z-index: -1;
-          background: linear-gradient(135deg, var(--dynamic-bg-color) 0%, #121212 100%);
-      }
-      
-      /* Split screen layout */
-      .split-layout {
-          display: flex;
-          width: 100%;
-          height: 100vh;
-      }
-      
-      /* Left artistic side - smaller now */
-      .artistic-side {
-          flex: 0.35; /* Reduced from 1 to make it smaller */
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-          overflow: hidden;
-          padding: 2rem;
-      }
-      
-      .artistic-content {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          z-index: 1;
-      }
-      
-      /* Rectangular art placeholder replacing profile image */
-      .art-container {
-          width: 90%;
-          height: 70%;
-          position: relative;
-          /* No specific styling so the user can add their own art */
-      }
-      
-      .name-title {
-          margin-top: 2rem;
-          text-align: center;
-      }
-      
-      .name-title h1 {
-          font-size: 3rem;
-          margin-bottom: 0.5rem;
-          background: linear-gradient(to right, var(--text-color-2), var(--accent-color));
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-      }
-      
-      .name-title p {
-          font-size: 1.2rem;
-          opacity: 0.8;
-      }
-      
-      /* Right content side - no dark background */
-      .content-side {
-          flex: 0.65; /* Increased from 1 to make it larger relative to left side */
-          height: 100vh;
-          overflow-y: auto;
-          padding: 1.5rem; /* Reduced from 2rem */
-          position: relative;
-          /* Removed background-color and backdrop-filter */
-      }
-      
-      .content-container {
-          max-width: 800px;
-          margin: 0 auto;
-          padding: 1rem; /* Reduced from 2rem */
-      }
-
-      .section-title {
-          font-size: 2rem;
-          margin-bottom: 1rem; /* Reduced from 1.5rem */
-          position: relative;
-          color: var(--text-color-2);
-      }
-      
-      .section-title::after {
-          content: '';
-          position: absolute;
-          bottom: -3px; /* Reduced from -5px */
-          left: 0;
-          width: 50px;
-          height: 3px;
-          background-color: var(--text-color-2);
-      }
-      
-      /* Pickle bar style for links and blogs */
-      .pickle-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Slightly smaller */
-          grid-gap: 1rem; /* Reduced from 1.5rem */
-          margin-bottom: 2rem; /* Reduced from 3rem */
-      }
-      
-      .pickle-item {
-          background-color: var(--text-color);
-          border-radius: var(--border-radius);
-          overflow: hidden;
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-          transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          cursor: pointer;
-      }
-      
-      .pickle-item:hover {
-          transform: translateY(-10px);
-      }
-      
-      .pickle-image {
-          height: 120px;
-          background-color: rgba(255, 255, 255, 0.1);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-      }
-      
-      .pickle-image img {
-          width: 50px;
-          height: 50px;
-          object-fit: contain;
-      }
-      
-      .pickle-content {
-          padding: 1rem;
-          text-align: center;
-      }
-      
-      .pickle-content h3 {
-          font-size: 1rem;
-          margin-bottom: 0.5rem;
-          color: var(--accent-color);
-      }
-      
-      .pickle-content p {
-          font-size: 0.8rem;
-          color: var(--text-color-2);
-          opacity: 0.8;
-      }
-      
-      /* Blog items */
-      .blog-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Smaller from 280px */
-          grid-gap: 1.5rem; /* Reduced from 2rem */
-      }
-      
-      .blog-item {
-          background-color: var(--text-color);
-          border-radius: var(--border-radius);
-          overflow: hidden;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-          transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          position: relative;
-      }
-      
-      .blog-item:hover {
-          transform: translateY(-10px);
-      }
-      
-    .blog-image {
-        height: 140px; /* Reduced from 160px */
-        background-color: rgba(255, 255, 255, 0.1);
-        position: relative;
-        overflow: hidden; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-    }
-
-    .blog-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: var(--border-radius);
-    }
-      
-      .blog-content {
-          padding: 1.2rem; /* Reduced from 1.5rem */
-      }
-      
-      .blog-date {
-          font-size: 0.85rem;
-          color: var(--text-color-2);
-          margin-bottom: 0.5rem;
-          display: block;
-      }
-      
-      .blog-content h3 {
-          font-size: 1.2rem;
-          margin-bottom: 0.8rem;
-          position: relative;
-          padding-bottom: 0.8rem;
-          color: var(--text-color-2);
-      }
-      
-      .blog-content h3::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 40px;
-          height: 2px;
-          background-color: var(--text-color-2);
-      }
-      
-      .blog-content p {
-          font-size: 0.9rem;
-          line-height: 1.6;
-          color: var(--text-color-2);
-          opacity: 0.8;
-      }
-      
-      .read-more {
-          margin-top: 1rem;
-          display: inline-block;
-          color: var(--text-color-2);
-          font-weight: 600;
-          font-size: 0.9rem;
-          text-decoration: none;
-          position: relative;
-      }
-      
-      .read-more::after {
-          content: '→';
-          margin-left: 0.3rem;
-          transition: transform 0.3s;
-      }
-      
-      .read-more:hover::after {
-          transform: translateX(5px);
-      }
-      
-      /* Make sure text is readable */
-      .blog-content h3, .blog-content p, .pickle-content h3, .pickle-content p {
-        color: var(--text-color-2);
-      }
-      
-      @media (max-width: 768px) {
-          .split-layout {
-              flex-direction: column;
-          }
-          
-          .artistic-side, .content-side {
-              flex: none;
-              width: 100%;
-          }
-          
-          .artistic-side {
-              height: 35vh; /* Make it a bit smaller on mobile */
-          }
-          
-          .content-side {
-              height: 65vh;
-          }
-          
-          .art-container {
-              width: 90%;
-              height: 80%;
-          }
-          
-          .pickle-grid {
-              grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-          }
-      }
-      
-      .btn-custom {
-        text-decoration: none;
-        display: block;
-        padding: 0.6rem 0.5rem; /* Reduced from 0.8rem 0.6rem */
-        border-radius: var(--border-radius);
-        background-color: var(--text-color);
-        color: var(--text-color-2);
-        font-weight: 500;
-        text-align: center;
-        transition: transform 0.3s, box-shadow 0.3s;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        font-size: 0.85rem; /* Slightly smaller font size to fit better */
-    }
-    
-    .btn-custom:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
-    }
-    
-    .pages-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* Two columns of equal width */
-        gap: 0.6rem; /* Reduced from 0.8rem */
-        margin-bottom: 1.5rem; /* Reduced from 2rem */
-    }
-    
-    @media (max-width: 768px) {
-        .pages-container {
-            grid-template-columns: 1fr; /* Single column on mobile */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=3.0">
+    <title>Fevzi Kilas - Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <!-- Add STL Loader -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/STLLoader.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    }
-  </style>
-</head>
-
-<body>
-  <main>
-    <section class="background">
-      <canvas id="canvas" style="z-index: 0;"></canvas>
-    </section>
-
-    <div class="split-layout">
-      <!-- Left artistic side -->
-      <div class="artistic-side">
-        <div class="artistic-content">
-        <div class="art-container">
-            <img id="artistic-image" src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmN3enJkamd3NGZuZW1qcTR0ZHNiMmM2YWQ1dnNjaTR2ZjF1dzdwdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pYNhxuY2Xx528/giphy.gif" alt="Artistic GIF" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--border-radius); transition: opacity 1s ease;">
-        </div>
-        <script>
-            const images = [
-                "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmN3enJkamd3NGZuZW1qcTR0ZHNiMmM2YWQ1dnNjaTR2ZjF1dzdwdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pYNhxuY2Xx528/giphy.gif",
-                "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWNwMG56cG13YWVzc21pNXVhN3g4Z3B0cWJkczNseTdidXA1dDVpMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yALcFbrKshfoY/giphy.gif",
-                "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExemM5N3N6NnQwdTRoZDZvOWlwdW4zdWZiNWowaGtzdW80bXJ3aTJoeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aTCa0tTwPzfig/giphy.gif",
-                "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXY0dzRlYWQ0a2s0NXF2a2Y5Y3J5YmNwZWUyOXNwNGVwbjR0aDJsMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ayBZf3xVtT74Q/giphy.gif",
-                "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDdtYnpuNm55Y2k5Y214eDk2cDdsbGY3eDgwamIwdGkwc3RmZnk1ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Wg3t1BrBTeTHq/giphy.gif",
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/12cbe8a4-f55c-4b40-85bb-d8e1405e7b84/dezrmu4-0b463d5d-1c1f-463b-909b-6951227567a5.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzEyY2JlOGE0LWY1NWMtNGI0MC04NWJiLWQ4ZTE0MDVlN2I4NFwvZGV6cm11NC0wYjQ2M2Q1ZC0xYzFmLTQ2M2ItOTA5Yi02OTUxMjI3NTY3YTUuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.-vGTqcqLHyF_CBArxzrsOjtFV55EIjY2pxyEDVPrmBo",
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7a2d3816-66fc-444a-b22a-81f3a67838af/desdx4z-ecb50a03-177d-4df4-8c1e-950ea99bf834.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzdhMmQzODE2LTY2ZmMtNDQ0YS1iMjJhLTgxZjNhNjc4MzhhZlwvZGVzZHg0ei1lY2I1MGEwMy0xNzdkLTRkZjQtOGMxZS05NTBlYTk5YmY4MzQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.ZrGaYCClSI-HgaQkLFGo6Wcb9ewiA_-xf10B3ZoILfA",
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/12cbe8a4-f55c-4b40-85bb-d8e1405e7b84/dfcu60j-004620a2-e00b-4497-93a3-b9ea738b6677.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzEyY2JlOGE0LWY1NWMtNGI0MC04NWJiLWQ4ZTE0MDVlN2I4NFwvZGZjdTYwai0wMDQ2MjBhMi1lMDBiLTQ0OTctOTNhMy1iOWVhNzM4YjY2NzcuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Ijuwd__qK1Lwx0G0JnNKiiTBMv3FYfhD_Dm5YJjbaok",
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c83c004e-1370-4756-88e5-4071de797088/denus5p-8441bdcb-c4f5-49d6-ad16-c0f648355855.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2M4M2MwMDRlLTEzNzAtNDc1Ni04OGU1LTQwNzFkZTc5NzA4OFwvZGVudXM1cC04NDQxYmRjYi1jNGY1LTQ5ZDYtYWQxNi1jMGY2NDgzNTU4NTUuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.sn9Wutf1iSk_ZUCPYL_cAMN5x0v9b304_Ny4tiDm6O4",
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/12cbe8a4-f55c-4b40-85bb-d8e1405e7b84/dfvdbzc-ea86506e-08ec-4ce6-92c7-32ea7f5189f6.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzEyY2JlOGE0LWY1NWMtNGI0MC04NWJiLWQ4ZTE0MDVlN2I4NFwvZGZ2ZGJ6Yy1lYTg2NTA2ZS0wOGVjLTRjZTYtOTJjNy0zMmVhN2Y1MTg5ZjYuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.r_PHuQ6IIqWEqPcQy6fL6NDW41Vmr4Gx8HcqE5PyK8U",
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/12cbe8a4-f55c-4b40-85bb-d8e1405e7b84/dg3u7hq-c1a76bed-89de-4294-9621-bb4ec5928066.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzEyY2JlOGE0LWY1NWMtNGI0MC04NWJiLWQ4ZTE0MDVlN2I4NFwvZGczdTdocS1jMWE3NmJlZC04OWRlLTQyOTQtOTYyMS1iYjRlYzU5MjgwNjYuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.rYkG0BxIeofIeDrbwyDJge1i8l4MDCGA1ZxtoHva4nU",
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/12cbe8a4-f55c-4b40-85bb-d8e1405e7b84/dacbjh5-9642d41b-8f03-4d32-a07c-b13c06f206f8.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzEyY2JlOGE0LWY1NWMtNGI0MC04NWJiLWQ4ZTE0MDVlN2I4NFwvZGFjYmpoNS05NjQyZDQxYi04ZjAzLTRkMzItYTA3Yy1iMTNjMDZmMjA2ZjguZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.9bXbpd_v-v3nJoRm9Z0cDFX8N5GIbGD_fqRaPUpg6iI",
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/007eaef7-0939-4e29-a008-3740b481a67a/dekeq02-2376bdb3-d6dd-45f7-9e76-5ce0e95aa879.png/v1/fill/w_1264,h_632,q_70,strp/foggy_forest_by_eagersprout_dekeq02-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvMDA3ZWFlZjctMDkzOS00ZTI5LWEwMDgtMzc0MGI0ODFhNjdhXC9kZWtlcTAyLTIzNzZiZGIzLWQ2ZGQtNDVmNy05ZTc2LTVjZTBlOTVhYTg3OS5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.-LwpF-V70t8ql7cwPsKt6vO_OZcOZiNjnFuRkA_9DGU",
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3a8f25dd-0da0-428b-8db2-840fe85708b8/db73c8l-eaa30ef1-05e1-4251-a4ff-fafaaa996f81.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzNhOGYyNWRkLTBkYTAtNDI4Yi04ZGIyLTg0MGZlODU3MDhiOFwvZGI3M2M4bC1lYWEzMGVmMS0wNWUxLTQyNTEtYTRmZi1mYWZhYWE5OTZmODEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.6kttMjmZuzE4Oda_NytwG1acYFEUSkvAM3gUg6Z7lNY       ",
         
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            background-color: #000;
+            color: #fff;
+            height: 1600vh; /* Height for all sections */
+            cursor: pointer;
+            /* Hide scrollbar but keep scrolling functionality */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        #landing {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .title {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-30px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-15px) translateX(-50%);
+            }
+        }
+        
+        .link-section {
+            height: 100vh;
+            position: relative;
+        }
+        
+        #link-name {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 150px);
+            font-size: 1.8rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        /* Copyright notice style */
+        .copyright {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.3rem;
+            color: rgba(255, 255, 255, 0.4);
+            z-index: 100;
+            pointer-events: none;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <section id="landing">
+        <h1 class="title">Fevzi KILAS</h1>
+        <p class="subtitle">ML Engineer</p>
+        <div class="scroll-indicator">↓</div>
+    </section>
+    
+    <!-- Info about current 3D object link -->
+    <div id="link-name"></div>
+    
+    <!-- Copyright notice -->
+    <div class="copyright">© 2025 All Rights Reserved</div>
+    
+    <script>
+        // Update the links array with model information
+        const links = [
+            { url: "https://fevzikilas.github.io/blog-agent", text: "♾️ Agentic Blogs ♾️", model: "agentic-blog.stl" },
+            { url: "https://fevzikilas.github.io/flashcards", text: "⛩️ Flashcards ⛩️", model: "flashcard.stl" },
+            { url: "https://fevzikilas.github.io/neurapath", text: "💮 Neura Path 💮", model: "neuropath.stl" },
+            { url: "https://fevzikilas.github.io/MDLP", text: "MDLP 🌛", model: "mdlp.stl" },
+            { url: "https://fevzikilas.github.io/FON", text: "Focus 🤗", model: "focus.stl" },
+            { url: "https://fevzikilas.github.io/NOTES", text: "MY NOTES 😊", model: "mynotes.stl" },
+            { url: "https://fevzikilas.github.io/TSFM", text: "TSF Models", model: "tsf.stl" },
+            { url: "https://fevzikilas.github.io/TSF", text: "Time Series & More", model: "tsandmore.stl" },
+            { url: "https://fevzikilas.github.io/Pothole_detection", text: "Pothole Detection", model: "pothole.stl" },
+            { url: "https://fevzikilas.github.io/LLM_first_notebook", text: "General LLM works", model: "genllm.stl" },
+            { url: "https://fevzikilas.github.io/LLM_Tarim", text: "TARIM LLM", model: "tarimllm.stl" },
+            { url: "https://fevzikilas.github.io/classification", text: "Classification", model: "classification.stl" },
+            { url: "https://fevzikilas.github.io/BlobCapture", text: "Blob Capture", model: "blob.stl" },
+            { url: "https://fevzikilas.github.io/Prototune_data_preparation", text: "Prototune", model: "prottotune.stl" },
+            { url: "https://loncam.github.io/", text: "Lonca", model: "lonca.stl" },
+            { url: "https://fevzikilas.github.io/skin_cancer_model_ISIC2016", text: "Skin Cancer Classification", model: "skincancer.stl" }
+        ];
+        
+        // Create link sections (just for scroll purposes)
+        links.forEach((link, index) => {
+            const section = document.createElement('section');
+            section.className = 'link-section';
+            section.id = `link-section-${index}`;
+            document.body.appendChild(section);
+        });
+        
+        // Start fresh - define all animation variables up front
+        let currentIndex = -1;
+        let scrollY = window.scrollY;
+        let prevScrollY = scrollY;
+        let scrollDirection = 0; // 0: none, 1: down, -1: up
+        let targetIndex = -1;
+        let scrollProgress = 0;
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        
+        // Setup Three.js
+        const canvas = document.getElementById('canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+        
+        // Setup raycaster for object interaction
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let hoveredObject = null;
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(2, 2, 5);
+        scene.add(directionalLight);
+        
+        // Create an object to store loaded models by filename
+        const loadedModels = {};
 
+        // Function to load an STL model and create a mesh
+        function loadSTLModel(filename, index, callback) {
+            const stlLoader = new THREE.STLLoader();
+            stlLoader.load(filename, function(geometry) {
+                console.log(`STL ${filename} loaded - starting processing`);
+                try {
+                    // Make sure normals are computed properly
+                    geometry.computeVertexNormals();
+                    
+                    // Center the geometry
+                    geometry.center();
+                    
+                    // Compute the bounding box to adjust scale appropriately
+                    geometry.computeBoundingBox();
+                    const size = new THREE.Vector3();
+                    geometry.boundingBox.getSize(size);
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = 1.0 / maxDim;  // Scale to fit a unit cube
+                    
+                    // Apply scaling based on actual model dimensions
+                    geometry.scale(scale, scale, scale);
+                    
+                    console.log(`STL model ${filename} processed - details:`, 
+                                'Vertices:', geometry.attributes.position.count,
+                                'Size:', size);
+                    
+                    // Store the processed geometry
+                    loadedModels[filename] = geometry;
+                    
+                    if (callback) callback(geometry, index);
+                } catch (e) {
+                    console.error(`Error processing STL ${filename}:`, e);
+                    // Use a fallback geometry in case of error
+                    if (callback) callback(null, index);
+                }
+            }, 
+            // Progress callback
+            function(xhr) {
+                console.log(filename + ': ' + (xhr.loaded / xhr.total * 100) + '% loaded');
+            }, 
+            // Error callback
+            function(error) {
+                console.error('Failed to load STL:', filename, error);
+                // Use a fallback geometry in case of error
+                if (callback) callback(null, index);
+            });
+        }
 
-            ];
-
-            let currentIndex = 0;
-            const imageElement = document.getElementById("artistic-image");
-
-            setInterval(() => {
-                imageElement.style.opacity = 0; // Fade out
-                setTimeout(() => {
-                    currentIndex = (currentIndex + 1) % images.length;
-                    imageElement.src = images[currentIndex];
-                    imageElement.style.opacity = 1; // Fade in
-                }, 10); 
-            }, 2000); 
-        </script>
-
-        </div>
-      </div>
-      
-      <!-- Right content side -->
-      <div class="content-side">
-        <div class="content-container">
-
-            <h2 class="section-title">Fevzi KILAS</h2>
-            <div class="pages-container">
-                <a href="https://fevzikilas.github.io/blog-agent" class="btn btn-custom" target="_blank">♾️ Agentic Blogs ♾️</a>
-                <a href="https://fevzikilas.github.io/flashcards" class="btn btn-custom" target="_blank">⛩️ Flashcards ⛩️</a>
-                <a href="https://fevzikilas.github.io/neurapath" class="btn btn-custom" target="_blank">💮 Neura Path 💮</a>
-                <a href="https://fevzikilas.github.io/MDLP" class="btn btn-custom" target="_blank">MDLP 🌛</a>
-                <a href="https://fevzikilas.github.io/FON" class="btn btn-custom" target="_blank">Focus 🤗</a>
-                <a href="https://fevzikilas.github.io/NOTES" class="btn btn-custom" target="_blank">MY NOTES 😊</a>
-                <a href="https://fevzikilas.github.io/TSFM" class="btn btn-custom" target="_blank">TSF Models</a>
-                <a href="https://fevzikilas.github.io/TSF" class="btn btn-custom" target="_blank">Time Series & More</a>
-                <a href="https://fevzikilas.github.io/Pothole_detection" class="btn btn-custom" target="_blank">Pothole Detection</a>
-                <a href="https://fevzikilas.github.io/LLM_first_notebook" class="btn btn-custom" target="_blank">Geneal LLM works</a>
-                <a href="https://fevzikilas.github.io/LLM_Tarim" class="btn btn-custom" target="_blank">TARIM LLM</a>
-                <a href="https://fevzikilas.github.io/classification" class="btn btn-custom" target="_blank">Classification</a>
-                <a href="https://fevzikilas.github.io/BlobCapture" class="btn btn-custom" target="_blank">Blob Capture</a>
-                <a href="https://fevzikilas.github.io/Prototune_data_preparation" class="btn btn-custom" target="_blank">Prototune</a>
-                <a href="https://loncam.github.io/" class="btn btn-custom" target="_blank">Lonca</a>
-                <a href="https://fevzikilas.github.io/skin_cancer_model_ISIC2016" class="btn btn-custom" target="_blank">Skin Cancer Classification</a>
-            </div>
-
-
-
-            <h2 class="section-title">Socials</h2>
-            <div class="pickle-grid">
-
-              <a class="pickle-item"  href="https://github.com/fevzikilas" target="_blank">
-                <div class="pickle-image">
-                  <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
-                </div>
-                <div class="pickle-content">
-                  <h3>GitHub</h3>
-                </div>
-              </a>
-              
-              <a class="pickle-item"  href="https://linkedin.com/in/fevzikilas" target="_blank">
-                <div class="pickle-image">
-                  <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
-                </div>
-                <div class="pickle-content">
-                  <h3>LinkedIn</h3>
-                </div>
-              </a>
-              
-              <a class="pickle-item"  href="https://x.com/iksapp" target="_blank">
-                <div class="pickle-image">
-                  <img src="https://about.x.com/content/dam/about-twitter/x/brand-toolkit/logo-black.png.twimg.1920.png" alt="Twitter">
-                </div>
-                <div class="pickle-content">
-                  <h3>X</h3>
-                </div>
-              </a>
-              
-              <a class="pickle-item" href="https://huggingface.co/nieche" target="_blank">
-                <div class="pickle-image" >
-                  <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="huggingface">
-                </div>
-                <div class="pickle-content" >
-                  <h3>Hugging Face</h3>
-                </div>
-              </a>
-             
-            </div>
-          
-          <h2 class="section-title">Latest Articles</h2>
-          <div class="blog-grid">
-            <div class="blog-item">
-              <div class="blog-image" >
-                <img src="https://rszr.getimg.ai/resize?url=https%3A%2F%2Fimg.getimg.ai%2Fgenerated%2Fimg-7wrpDhOzzheYOIRjnfNmvA.jpeg&type=webp&width=1920&speed=5" >
-              </div>
-              <div class="blog-content">
-                <span class="blog-date">June 12, 2023</span>
-                <h3>Modern Web Design Trends</h3>
-                <p>Exploring the latest trends in web design and how they're shaping digital experiences.</p>
-                <a href="#" class="read-more">Read more</a>
-              </div>
-            </div>
-            <div class="blog-item">
-              <div class="blog-image"></div>
-              <div class="blog-content">
-                <span class="blog-date">May 28, 2023</span>
-                <h3>The Rise of AI in Development</h3>
-                <p>How artificial intelligence is transforming software development and productivity.</p>
-                <a href="#" class="read-more">Read more</a>
-              </div>
-            </div>
+        // Modified code to create objects with STL models
+        function createObjectForLink(link, index) {
+            // Create material based on the object index
+            const material = new THREE.MeshStandardMaterial({
+                color: colors[index % colors.length],
+                metalness: 0.4,
+                roughness: 0.3,
+                emissive: 0x222222,
+                side: THREE.DoubleSide,
+                flatShading: false
+            });
             
-            <div class="blog-item">
-              <div class="blog-image"></div>
-              <div class="blog-content">
-                <span class="blog-date">April 15, 2023</span>
-                <h3>Building Responsive Interfaces</h3>
-                <p>Best practices for creating interfaces that work across all device sizes.</p>
-                <a href="#" class="read-more">Read more</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+            // If the model is already loaded, use it
+            let geometry;
+            if (loadedModels[link.model]) {
+                geometry = loadedModels[link.model];
+            } else {
+                // If model isn't loaded, create a simple sphere as placeholder
+                geometry = new THREE.SphereGeometry(1, 16, 16);
+                console.warn(`Model ${link.model} not loaded, using placeholder.`);
+            }
+            
+            // Create the mesh
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(0, -50, 0); // Start out of view
+            mesh.scale.set(0, 0, 0); // Start with no scale
+            mesh.userData = {
+                initialRotation: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                },
+                // Removed auto rotation properties
+                linkIndex: index,
+                url: link.url,
+                text: link.text,
+                model: link.model,
+                isLink: true,
+                isAnimating: false,
+                isStlModel: true
+            };
+            
+            mesh.rotation.x = mesh.userData.initialRotation.x;
+            mesh.rotation.y = mesh.userData.initialRotation.y;
+            mesh.rotation.z = mesh.userData.initialRotation.z;
+            mesh.visible = false;
+            
+            scene.add(mesh);
+            objects[index] = mesh;
+            
+            console.log(`Created object for link ${index}: ${link.text} with model ${link.model}`);
+        }
 
-  <!-- Keep the existing scripts -->
-  <script>
-!function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{("undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this).Parallax=t()}}(function(){return function t(e,i,n){function o(r,a){if(!i[r]){if(!e[r]){var l="function"==typeof require&&require;if(!a&&l)return l(r,!0);if(s)return s(r,!0);var h=new Error("Cannot find module '"+r+"'");throw h.code="MODULE_NOT_FOUND",h}var u=i[r]={exports:{}};e[r][0].call(u.exports,function(t){var i=e[r][1][t];return o(i||t)},u,u.exports,t,e,i,n)}return i[r].exports}for(var s="function"==typeof require&&require,r=0;r<n.length;r++)o(n[r]);return o}({1:[function(t,e,i){"use strict";function n(t){if(null===t||void 0===t)throw new TypeError("Object.assign cannot be called with null or undefined");return Object(t)}var o=Object.getOwnPropertySymbols,s=Object.prototype.hasOwnProperty,r=Object.prototype.propertyIsEnumerable;e.exports=function(){try{if(!Object.assign)return!1;var t=new String("abc");if(t[5]="de","5"===Object.getOwnPropertyNames(t)[0])return!1;for(var e={},i=0;i<10;i++)e["_"+String.fromCharCode(i)]=i;if'0123456789'!==Object.getOwnPropertyNames(e).map(function(t){return e[t]}).join(""))return!1;var n={};return"abcdefghijklmnopqrst".split("").forEach(function(t){n[t]=t}),"abcdefghijklmnopqrst"===Object.keys(Object.assign({},n)).join("")}catch(t){return!1}}()?Object.assign:function(t,e){for(var i,a,l=n(t),h=1;h<arguments.length;h++){i=Object(arguments[h]);for(var u in i)s.call(i,u)&&(l[u]=i[u]);if(o){a=o(i);for(var c=0;c<a.length;c++)r.call(i,a[c])&&(l[a[c]]=i[a[c]])}}return l}},{}],2:[function(t,e,i){(function(t){(function(){var i,n,o,s,r,a;"undefined"!=typeof performance&&null!==performance&&performance.now?e.exports=function(){return performance.now()}:void 0!==t&&null!==t&&t.hrtime?(e.exports=function(){return(i()-r)/1e6},n=t.hrtime,s=(i=function(){var t;return 1e9*(t=n())[0]+t[1]})(),a=1e9*t.uptime(),r=s-a):Date.now?(e.exports=function(){return Date.now()-o},o=Date.now()):(e.exports=function(){return(new Date).getTime()-o},o=(new Date).getTime())}).call(this)}).call(this,t("_process"))},{_process:3}],3:[function(t,e,i){function n(){throw new Error("setTimeout has not been defined")}function o(){throw new Error("clearTimeout has not been defined")}function s(t){if(c===setTimeout)return setTimeout(t,0);if((c===n||!c)&&setTimeout)return c=setTimeout,setTimeout(t,0);try{return c(t,0)}catch(e){try{return c.call(null,t,0)}catch(e){return c.call(this,t,0)}}}function r(t){if(d===clearTimeout)return clearTimeout(t);if((d===o||!d)&&clearTimeout)return d=clearTimeout,clearTimeout(t);try{return d(t)}catch(e){try{return d.call(null,t)}catch(e){return d.call(this,t)}}}function a(){v&&p&&(v=!1,p.length?f=p.concat(f):y=-1,f.length&&l())}function l(){if(!v){var t=s(a);v=!0;for(var e=f.length;e;){for(p=f,f=[];++y<e;)p&&p[y].run();y=-1,e=f.length}p=null,v=!1,r(t)}}function h(t,e){this.fun=t,this.array=e}function u(){}var c,d,m=e.exports={};!function(){try{c="function"==typeof setTimeout?setTimeout:n}catch(t){c=n}try{d="function"==typeof clearTimeout?clearTimeout:o}catch(t){d=o}}();var p,f=[],v=!1,y=-1;m.nextTick=function(t){var e=new Array(arguments.length-1);if(arguments.length>1)for(var i=1;i<arguments.length;i++)e[i-1]=arguments[i];f.push(new h(t,e)),1!==f.length||v||s(l)},h.prototype.run=function(){this.fun.apply(null,this.array)},m.title="browser",m.browser=!0,m.env={},m.argv=[],m.version="",m.versions={},m.on=u,m.addListener=u,m.once=u,m.off=u,m.removeListener=u,m.removeAllListeners=u,m.emit=u,m.prependListener=u,m.prependOnceListener=u,m.listeners=function(t){return[]},m.binding=function(t){throw new Error("process.binding is not supported")},m.cwd=function(){return"/"},m.chdir=function(t){throw new Error("process.chdir is not supported")},m.umask=function(){return 0}},{}],4:[function(t,e,i){(function(i){for(var n=t("performance-now"),o="undefined"==typeof window?i:window,s=["moz","webkit"],r="AnimationFrame",a=o["request"+r],l=o["cancel"+r]||o["cancelRequest"+r],h=0;!a&&h<s.length;h++)a=o[s[h]+"Request"+r],l=o[s[h]+"Cancel"+r]||o[s[h]+"CancelRequest"+r];if(!a||!l){var u=0,c=0,d=[];a=function(t){if(0===d.length){var e=n(),i=Math.max(0,1e3/60-(e-u));u=i+e,setTimeout(function(){var t=d.slice(0);d.length=0;for(var e=0;e<t.length;e++)if(!t[e].cancelled)try{t[e].callback(u)}catch(t){setTimeout(function(){throw t},0)}},Math.round(i))}return d.push({handle:++c,callback:t,cancelled:!1}),c},l=function(t){for(var e=0;e<d.length;e++)d[e].handle===t&&(d[e].cancelled=!0)}}e.exports=function(t){return a.call(o,t)},e.exports.cancel=function(){l.apply(o,arguments)},e.exports.polyfill=function(){o.requestAnimationFrame=a,o.cancelAnimationFrame=l}}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"performance-now":2}],5:[function(t,e,i){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var o=function(){function t(t,e){for(var i=0;i<e.length;i++){var n=e[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}return function(e,i,n){return i&&t(e.prototype,i),n&&t(e,n),e}}(),s=t("raf"),r=t("object-assign"),a={propertyCache:{},vendors:[null,["-webkit-","webkit"],["-moz-","Moz"],["-o-","O"],["-ms-","ms"]],clamp:function(t,e,i){return e<i?t<e?e:t>i?i:t:t<i?i>e?e:t},data:function(t,e){return a.deserialize(t.getAttribute("data-"+e))},deserialize:function(t){return"true"===t||"false"!==t&&("null"===t?null:!isNaN(parseFloat(t))&&isFinite(t)?parseFloat(t):t)},camelCase:function(t){return t.replace(/-+(.)?/g,function(t,e){return e?e.toUpperCase():""})},accelerate:function(t){a.css(t,"transform","translate3d(0,0,0) rotate(0.0001deg)"),a.css(t,"transform-style","preserve-3d"),a.css(t,"backface-visibility","hidden")},transformSupport:function(t){for(var e=document.createElement("div"),i=!1,n=null,o=!1,s=null,r=null,l=0,h=a.vendors.length;l<h;l++)if(null!==a.vendors[l]?(s=a.vendors[l][0]+"transform",r=a.vendors[l][1]+"Transform"):(s="transform",r="transform"),void 0!==e.style[r]){i=!0;break}switch(t){case"2D":o=i;break;case"3D":if(i){var u=document.body||document.createElement("body"),c=document.documentElement,d=c.style.overflow,m=!1;document.body||(m=!0,c.style.overflow="hidden",c.appendChild(u),u.style.overflow="hidden",u.style.background=""),u.appendChild(e),e.style[r]="translate3d(1px,1px,1px)",o=void 0!==(n=window.getComputedStyle(e).getPropertyValue(s))&&n.length>0&&"none"!==n,c.style.overflow=d,u.removeChild(e),m&&(u.removeAttribute("style"),u.parentNode.removeChild(u))}}return o},css:function(t,e,i){var n=a.propertyCache[e];if(!n)for(var o=0,s=a.vendors.length;o<s;o++)if(n=null!==a.vendors[o]?a.camelCase(a.vendors[o][1]+"-"+e):e,void 0!==t.style[n]){a.propertyCache[e]=n;break}t.style[n]=i}},l={relativeInput:!1,clipRelativeInput:!1,inputElement:null,hoverOnly:!1,calibrationThreshold:100,calibrationDelay:500,supportDelay:500,calibrateX:!1,calibrateY:!0,invertX:!0,invertY:!0,limitX:!1,limitY:!1,scalarX:10,scalarY:10,frictionX:.1,frictionY:.1,originX:.5,originY:.5,pointerEvents:!1,precision:1,onReady:null,selector:null},h=function(){function t(e,i){n(this,t),this.element=e;var o={calibrateX:a.data(this.element,"calibrate-x"),calibrateY:a.data(this.element,"calibrate-y"),invertX:a.data(this.element,"invert-x"),invertY:a.data(this.element,"invert-y"),limitX:a.data(this.element,"limit-x"),limitY:a.data(this.element,"limit-y"),scalarX:a.data(this.element,"scalar-x"),scalarY:a.data(this.element,"scalar-y"),frictionX:a.data(this.element,"friction-x"),frictionY:a.data(this.element,"friction-y"),originX:a.data(this.element,"origin-x"),originY:a.data(this.element,"origin-y"),pointerEvents:a.data(this.element,"pointer-events"),precision:a.data(this.element,"precision"),relativeInput:a.data(this.element,"relative-input"),clipRelativeInput:a.data(this.element,"clip-relative-input"),hoverOnly:a.data(this.element,"hover-only"),inputElement:document.querySelector(a.data(this.element,"input-element")),selector:a.data(this.element,"selector")};for(var s in o)null===o[s]&&delete o[s];r(this,l,o,i),this.inputElement||(this.inputElement=this.element),this.calibrationTimer=null,this.calibrationFlag=!0,this.enabled=!1,this.depthsX=[],this.depthsY=[],this.raf=null,this.bounds=null,this.elementPositionX=0,this.elementPositionY=0,this.elementWidth=0,this.elementHeight=0,this.elementCenterX=0,this.elementCenterY=0,this.elementRangeX=0,this.elementRangeY=0,this.calibrationX=0,this.calibrationY=0,this.inputX=0,this.inputY=0,this.motionX=0,this.motionY=0,this.velocityX=0,this.velocityY=0,this.onMouseMove=this.onMouseMove.bind(this),this.onDeviceOrientation=this.onDeviceOrientation.bind(this),this.onDeviceMotion=this.onDeviceMotion.bind(this),this.onOrientationTimer=this.onOrientationTimer.bind(this),this.onMotionTimer=this.onMotionTimer.bind(this),this.onCalibrationTimer=this.onCalibrationTimer.bind(this),this.onAnimationFrame=this.onAnimationFrame.bind(this),this.onWindowResize=this.onWindowResize.bind(this),this.windowWidth=null,this.windowHeight=null,this.windowCenterX=null,this.windowCenterY=null,this.windowRadiusX=null,this.windowRadiusY=null,this.portrait=!1,this.desktop=!navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|BB10|mobi|tablet|opera mini|nexus 7)/i),this.motionSupport=!!window.DeviceMotionEvent&&!this.desktop,this.orientationSupport=!!window.DeviceOrientationEvent&&!this.desktop,this.orientationStatus=0,this.motionStatus=0,this.initialise()}return o(t,[{key:"initialise",value:function(){void 0===this.transform2DSupport&&(this.transform2DSupport=a.transformSupport("2D"),this.transform3DSupport=a.transformSupport("3D")),this.transform3DSupport&&a.accelerate(this.element),"static"===window.getComputedStyle(this.element).getPropertyValue("position")&&(this.element.style.position="relative"),this.pointerEvents||(this.element.style.pointerEvents="none"),this.updateLayers(),this.updateDimensions(),this.enable(),this.queueCalibration(this.calibrationDelay)}},{key:"doReadyCallback",value:function(){this.onReady&&this.onReady()}},{key:"updateLayers",value:function(){this.selector?this.layers=this.element.querySelectorAll(this.selector):this.layers=this.element.children,this.layers.length||console.warn("ParallaxJS: Your scene does not have any layers."),this.depthsX=[],this.depthsY=[];for(var t=0;t<this.layers.length;t++){var e=this.layers[t];this.transform3DSupport&&a.accelerate(e),e.style.position=t?"absolute":"relative",e.style.display="block",e.style.left=0,e.style.top=0;var i=a.data(e,"depth")||0;this.depthsX.push(a.data(e,"depth-x")||i),this.depthsY.push(a.data(e,"depth-y")||i)}}},{key:"updateDimensions",value:function(){this.windowWidth=window.innerWidth,this.windowHeight=window.innerHeight,this.windowCenterX=this.windowWidth*this.originX,this.windowCenterY=this.windowHeight*this.originY,this.windowRadiusX=Math.max(this.windowCenterX,this.windowWidth-this.windowCenterX),this.windowRadiusY=Math.max(this.windowCenterY,this.windowHeight-this.windowCenterY)}},{key:"updateBounds",value:function(){this.bounds=this.inputElement.getBoundingClientRect(),this.elementPositionX=this.bounds.left,this.elementPositionY=this.bounds.top,this.elementWidth=this.bounds.width,this.elementHeight=this.bounds.height,this.elementCenterX=this.elementWidth*this.originX,this.elementCenterY=this.elementHeight*this.originY,this.elementRangeX=Math.max(this.elementCenterX,this.elementWidth-this.elementCenterX),this.elementRangeY=Math.max(this.elementCenterY,this.elementHeight-this.elementCenterY)}},{key:"queueCalibration",value:function(t){clearTimeout(this.calibrationTimer),this.calibrationTimer=setTimeout(this.onCalibrationTimer,t)}},{key:"enable",value:function(){this.enabled||(this.enabled=!0,this.orientationSupport?(this.portrait=!1,window.addEventListener("deviceorientation",this.onDeviceOrientation),this.detectionTimer=setTimeout(this.onOrientationTimer,this.supportDelay)):this.motionSupport?(this.portrait=!1,window.addEventListener("devicemotion",this.onDeviceMotion),this.detectionTimer=setTimeout(this.onMotionTimer,this.supportDelay)):(this.calibrationX=0,this.calibrationY=0,this.portrait=!1,window.addEventListener("mousemove",this.onMouseMove),this.doReadyCallback()),window.addEventListener("resize",this.onWindowResize),this.raf=s(this.onAnimationFrame))}},{key:"disable",value:function(){this.enabled&&(this.enabled=!1,this.orientationSupport?window.removeEventListener("deviceorientation",this.onDeviceOrientation):this.motionSupport?window.removeEventListener("devicemotion",this.onDeviceMotion):window.removeEventListener("mousemove",this.onMouseMove),window.removeEventListener("resize",this.onWindowResize),s.cancel(this.raf))}},{key:"calibrate",value:function(t,e){this.calibrateX=void 0===t?this.calibrateX:t,this.calibrateY=void 0===e?this.calibrateY:e}},{key:"invert",value:function(t,e){this.invertX=void 0===t?this.invertX:t,this.invertY=void 0===e?this.invertY:e}},{key:"friction",value:function(t,e){this.frictionX=void 0===t?this.frictionX:t,this.frictionY=void 0===e?this.frictionY:e}},{key:"scalar",value:function(t,e){this.scalarX=void 0===t?this.scalarX:t,this.scalarY=void 0===e?this.scalarY:e}},{key:"limit",value:function(t,e){this.limitX=void 0===t?this.limitX:t,this.limitY=void 0===e?this.limitY:e}},{key:"origin",value:function(t,e){this.originX=void 0===t?this.originX:t,this.originY=void 0===e?this.originY:e}},{key:"setInputElement",value:function(t){this.inputElement=t,this.updateDimensions()}},{key:"setPosition",value:function(t,e,i){e=e.toFixed(this.precision)+"px",i=i.toFixed(this.precision)+"px",this.transform3DSupport?a.css(t,"transform","translate3d("+e+","+i+",0)"):this.transform2DSupport?a.css(t,"transform","translate("+e+","+i+")"):(t.style.left=e,t.style.top=i)}},{key:"onOrientationTimer",value:function(){this.orientationSupport&&0===this.orientationStatus?(this.disable(),this.orientationSupport=!1,this.enable()):this.doReadyCallback()}},{key:"onMotionTimer",value:function(){this.motionSupport&&0===this.motionStatus?(this.disable(),this.motionSupport=!1,this.enable()):this.doReadyCallback()}},{key:"onCalibrationTimer",value:function(){this.calibrationFlag=!0}},{key:"onWindowResize",value:function(){this.updateDimensions()}},{key:"onAnimationFrame",value:function(){this.updateBounds();var t=this.inputX-this.calibrationX,e=this.inputY=this.calibrationY;(Math.abs(t)>this.calibrationThreshold||Math.abs(e)>this.calibrationThreshold)&&this.queueCalibration(0),this.portrait?(this.motionX=this.calibrateX?e:this.inputY,this.motionY=this.calibrateY?t:this.inputX):(this.motionX=this.calibrateX?t:this.inputX,this.motionY=this.calibrateY?e:this.inputY),this.motionX*=this.elementWidth*(this.scalarX/100),this.motionY*=this.elementHeight*(this.scalarY/100),isNaN(parseFloat(this.limitX))||(this.motionX=a.clamp(this.motionX,-this.limitX,this.limitX)),isNaN(parseFloat(this.limitY))||(this.motionY=a.clamp(this.motionY,-this.limitY,this.limitY)),this.velocityX+=(this.motionX-this.velocityX)*this.frictionX,this.velocityY+=(this.motionY-this.velocityY)*this.frictionY;for(var i=0;i<this.layers.length;i++){var n=this.layers[i],o=this.depthsX[i],r=this.depthsY[i],l=this.velocityX*(o*(this.invertX?-1:1)),h=this.velocityY*(r*(this.invertY?-1:1));this.setPosition(n,l,h)}this.raf=s(this.onAnimationFrame)}},{key:"rotate",value:function(t,e){var i=(t||0)/30,n=(e||0)/30,o=this.windowHeight>this.windowWidth;this.portrait!==o&&(this.portrait=o,this.calibrationFlag=!0),this.calibrationFlag&&(this.calibrationFlag=!1,this.calibrationX=i,this.calibrationY=n),this.inputX=i,this.inputY=n}},{key:"onDeviceOrientation",value:function(t){var e=t.beta,i=t.gamma;null!==e&&null!==i&&(this.orientationStatus=1,this.rotate(e,i))}},{key:"onDeviceMotion",value:function(t){var e=t.rotationRate.beta,i=t.rotationRate.gamma;null!==e&&null!==i&&(this.motionStatus=1,this.rotate(e,i))}},{key:"onMouseMove",value:function(t){var e=t.clientX,i=t.clientY;if(this.hoverOnly&&(e<this.elementPositionX||e>this.elementPositionX+this.elementWidth||i<this.elementPositionY||i>this.elementPositionY+this.elementHeight))return this.inputX=0,void(this.inputY=0);this.relativeInput?(this.clipRelativeInput&&(e=Math.max(e,this.elementPositionX),e=Math.min(e,this.elementPositionX+this.elementWidth),i=Math.max(i,this.elementPositionY),i=Math.min(i,this.elementPositionY+this.elementHeight)),this.elementRangeX&&this.elementRangeY&&(this.inputX=(e-this.elementPositionX-this.elementCenterX)/this.elementRangeX,this.inputY=(i-this.elementPositionY-this.elementCenterY)/this.elementRangeY)):this.windowRadiusX&&this.windowRadiusY&&(this.inputX=(e-this.windowCenterX)/this.windowRadiusX,this.inputY=(i-this.windowCenterY)/this.windowRadiusY)}},{key:"destroy",value:function(){this.disable(),clearTimeout(this.calibrationTimer),clearTimeout(this.detectionTimer),this.element.removeAttribute("style");for(var t=0;t<this.layers.length;t++)this.layers[t].removeAttribute("style");delete this.element,delete this.layers}},{key:"version",value:function(){return"3.1.0"}}]),t}();e.exports=h},{"object-assign":1,raf:4}]},{},[5])(5)});
+        // Add water ripple effect
+        const rippleCanvas = document.createElement('canvas');
+        const rippleCtx = rippleCanvas.getContext('2d');
+        const ripples = [];
+        
+        // Setup ripple canvas
+        function setupRippleEffect() {
+            rippleCanvas.width = window.innerWidth;
+            rippleCanvas.height = window.innerHeight;
+            rippleCanvas.style.position = 'fixed';
+            rippleCanvas.style.top = '0';
+            rippleCanvas.style.left = '0';
+            rippleCanvas.style.pointerEvents = 'none';
+            rippleCanvas.style.zIndex = '100';
+            rippleCanvas.style.opacity = '0.7';
+            document.body.appendChild(rippleCanvas);
+        }
+        
+        // Create a ripple at mouse position
+        function createRipple(x, y) {
+            ripples.push({
+                x,
+                y,
+                radius: 5,
+                maxRadius: 40,
+                opacity: 0.5,
+                color: `rgba(255, 255, 255, 0.7)`
+            });
+        }
+        
+        // Draw ripples
+        function drawRipples() {
+            rippleCtx.clearRect(0, 0, rippleCanvas.width, rippleCanvas.height);
+            
+            for (let i = 0; i < ripples.length; i++) {
+                const ripple = ripples[i];
+                
+                // Draw ripple
+                rippleCtx.beginPath();
+                rippleCtx.strokeStyle = ripple.color;
+                rippleCtx.lineWidth = 2;
+                rippleCtx.globalAlpha = ripple.opacity;
+                rippleCtx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+                rippleCtx.stroke();
+                
+                // Update ripple
+                ripple.radius += 1.5;
+                ripple.opacity -= 0.02;
+                
+                // Remove ripple if it's too big or too transparent
+                if (ripple.radius > ripple.maxRadius || ripple.opacity <= 0) {
+                    ripples.splice(i, 1);
+                    i--;
+                }
+            }
+        }
 
-</script>
-<script>
-      function getContrastColor(rgb) {
-          let [r, g, b] = rgb.match(/\d+/g).map(Number);
+        // Add more lighting to better illuminate the model
+        const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+        scene.add(hemisphereLight);
+        
+        // Add a point light that follows the camera
+        const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+        pointLight.position.set(0, 0, 5);
+        camera.add(pointLight);
+        scene.add(camera);
+        
+        // Colors for the objects - vibrant colors for STL models
+        const colors = [
+            0x3357FF, // First color for first STL model
+            0xFF5733, 0x33FF57, 0xF3FF33, 
+            0xFF33F3, 0x33FFF3, 0xF333FF, 0x33F3FF,
+            0xF3F333, 0xF33F33, 0x3F33F3, 0x33F3F3,
+            0xF33333, 0x33F333, 0x3333F3, 0xFFFFFF
+        ];
+        
+        // Create objects array with placeholders
+        const objects = new Array(links.length).fill(null);
+        
+        // Initialize objects with empty placeholder first
+        links.forEach((link, index) => {
+            // Create a placeholder sphere until the STL is loaded
+            const geometry = new THREE.SphereGeometry(1, 16, 16);
+            const material = new THREE.MeshPhongMaterial({
+                color: colors[index % colors.length],
+                shininess: 100,
+                specular: 0x444444,
+                transparent: true, 
+                opacity: 0.5
+            });
+            
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(0, -50, 0);
+            mesh.scale.set(0, 0, 0);
+            mesh.userData = {
+                initialRotation: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                },
+                linkIndex: index,
+                url: link.url,
+                text: link.text,
+                model: link.model,
+                isLink: true,
+                isAnimating: false
+            };
+            
+            mesh.rotation.x = mesh.userData.initialRotation.x;
+            mesh.rotation.y = mesh.userData.initialRotation.y;
+            mesh.rotation.z = mesh.userData.initialRotation.z;
+            mesh.visible = false;
+            
+            scene.add(mesh);
+            objects[index] = mesh;
+        });
+        
+        // Start loading all STL models
+        links.forEach((link, index) => {
+            loadSTLModel(link.model, index, function(geometry, idx) {
+                if (geometry) {
+                    // Once the model is loaded, update or create the object
+                    createObjectForLink(links[idx], idx);
+                    
+                    // If this is the current visible object, refresh it
+                    if (currentIndex === idx) {
+                        showObject(idx);
+                    }
+                }
+            });
+        });
 
-          let brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-          return brightness > 128 ? 'rgba(57, 0, 87, 1)' : 'rgba(255, 195, 255, 1)';
-      }
-
-      var baloncuk_color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`;
-      var reverse_baloncuk_color = getContrastColor(baloncuk_color);
-      document.documentElement.style.setProperty('--dynamic-bg-color', reverse_baloncuk_color);
-    
-      var baloncuk = baloncuk_color + ", ";
-      
-      function Star(id, x, y) {
-          this.id = id;
-          this.x = x;
-          this.y = y;
-          this.r = Math.floor(Math.random() * 2 ) + 1;
-          var alpha = (Math.floor(Math.random() * 10) + 1) / 10 / 2;
-          this.color = baloncuk + alpha + ")";
-      }
-
-      Star.prototype.draw = function () {
-          ctx.fillStyle = this.color;
-          ctx.shadowBlur = this.r * 2;
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
-          ctx.closePath();
-          ctx.fill();
-      }
-
-      Star.prototype.move = function () {
-          this.y -= .15 + params.backgroundSpeed / 100;
-          if (this.y <= -10) this.y = HEIGHT + 10;
-          this.draw();
-      }
-
-
-      function Dot(id, x, y, r) {
-          this.id = id;
-          this.x = x;
-          this.y = y;
-          this.r = Math.floor(Math.random() * 5) + 1;
-          this.maxLinks = 2;
-          this.speed = 0.5; 
-          this.a = .5;
-          this.aReduction = .005;
-          this.color = baloncuk + this.a + ")";
-          this.linkColor = baloncuk + this.a / 4 + ")";
-
-          this.dir = Math.floor(Math.random() * 140) + 200;
-      }
-
-      Dot.prototype.draw = function () {
-          ctx.fillStyle = this.color;
-          ctx.shadowBlur = this.r * 2;
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
-          ctx.closePath();
-          ctx.fill();
-      }
-
-      Dot.prototype.link = function () {
-          if (this.id == 0) return;
-          var previousDot1 = getPreviousDot(this.id, 1);
-          var previousDot2 = getPreviousDot(this.id, 2);
-          var previousDot3 = getPreviousDot(this.id, 3);
-          if (!previousDot1) return;
-          ctx.strokeStyle = this.linkColor;
-          ctx.moveTo(previousDot1.x, previousDot1.y);
-          ctx.beginPath();
-          ctx.lineTo(this.x, this.y);
-          if (previousDot2 != false) ctx.lineTo(previousDot2.x, previousDot2.y);
-          if (previousDot3 != false) ctx.lineTo(previousDot3.x, previousDot3.y);
-          ctx.stroke();
-          ctx.closePath();
-      }
-
-      function getPreviousDot(id, stepback) {
-          if (id == 0 || id - stepback < 0) return false;
-          if (typeof dots[id - stepback] != "undefined") return dots[id - stepback];
-          else return false; // getPreviousDot(id - stepback);
-      }
-
-      Dot.prototype.move = function () {
-          this.a -= this.aReduction;
-          if (this.a <= 0) {
-              this.die();
-              return
-          }
-          this.color = baloncuk + this.a + ")";
-          this.linkColor = baloncuk + this.a / 4 + ")";
-          this.x = this.x + Math.cos(degToRad(this.dir)) * this.speed;
-          this.y = this.y + Math.sin(degToRad(this.dir)) * this.speed;
-
-          this.draw();
-          this.link();
-      }
-
-      Dot.prototype.die = function () {
-          dots[this.id] = null;
-          delete dots[this.id];
-      }
-
-
-      var canvas = document.getElementById('canvas'),
-          ctx = canvas.getContext('2d'),
-          WIDTH,
-          HEIGHT,
-          mouseMoving = false,
-          mouseMoveChecker,
-          mouseX,
-          mouseY,
-          stars = [],
-          initStarsPopulation = 120,
-          dots = [],
-          dotsMinDist = 2,
-          params = {
-              maxDistFromCursor: 50,
-          };
-
-  function setCanvasSize() {
-      WIDTH = window.innerWidth;
-      HEIGHT = window.innerHeight;
-
-      canvas.setAttribute("width", WIDTH);
-      canvas.setAttribute("height", HEIGHT);
-
-      params.backgroundSpeed = 10;
-  }
-
-  function init() {
-      ctx.strokeStyle = "white";
-      ctx.shadowColor = "white";
-      for (var i = 0; i < initStarsPopulation; i++) {
-          stars[i] = new Star(i, Math.floor(Math.random() * WIDTH), Math.floor(Math.random() * HEIGHT));
-      }
-      ctx.shadowBlur = 0;
-      animate();
-  }
-
-  function handleResize() {
-      setCanvasSize();
-      stars = [];
-      init();
-  }
-
-  window.addEventListener('resize', handleResize);
-  document.addEventListener('DOMContentLoaded', () => {
-      setCanvasSize();
-      init();
-  });
-
-  function animate() {
-      ctx.clearRect(0, 0, WIDTH, HEIGHT);
-
-      for (var i in stars) {
-          stars[i].move();
-      }
-      for (var i in dots) {
-          dots[i].move();
-      }
-      drawIfMouseMoving();
-      requestAnimationFrame(animate);
-  }
-
-  window.onmousemove = function (e) {
-      mouseMoving = true;
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      clearInterval(mouseMoveChecker);
-      mouseMoveChecker = setTimeout(function () {
-          mouseMoving = false;
-      }, 100);
-  }
-
-
-  function drawIfMouseMoving() {
-      if (!mouseMoving) return;
-
-      if (dots.length == 0) {
-          dots[0] = new Dot(0, mouseX, mouseY);
-          dots[0].draw();
-          return;
-      }
-
-      var previousDot = getPreviousDot(dots.length, 1);
-      var prevX = previousDot.x;
-      var prevY = previousDot.y;
-
-      var diffX = Math.abs(prevX - mouseX);
-      var diffY = Math.abs(prevY - mouseY);
-
-      if (diffX < dotsMinDist || diffY < dotsMinDist) return;
-
-      var xVariation = Math.random() > .5 ? -1 : 1;
-      xVariation = xVariation * Math.floor(Math.random() * params.maxDistFromCursor) + 1;
-      var yVariation = Math.random() > .5 ? -1 : 1;
-      yVariation = yVariation * Math.floor(Math.random() * params.maxDistFromCursor) + 1;
-      dots[dots.length] = new Dot(dots.length, mouseX + xVariation, mouseY + yVariation);
-      dots[dots.length - 1].draw();
-      dots[dots.length - 1].link();
-  }
-
-  function degToRad(deg) {
-      return deg * (Math.PI / 180);
-  }
-
-  document.documentElement.style.setProperty('--text-color', reverse_baloncuk_color);
-  document.documentElement.style.setProperty('--card-bg-color', baloncuk_color);
-  document.documentElement.style.setProperty('--card-hover-bg', reverse_baloncuk_color);
-
-  </script>
-  <script>
-    // Update the CSS variables for the new design
-    function updateThemeColors() {
-      document.documentElement.style.setProperty('--text-color', reverse_baloncuk_color);
-      document.documentElement.style.setProperty('--card-bg-color', baloncuk_color.replace('1)', '0.8)'));
-      document.documentElement.style.setProperty('--card-hover-bg', reverse_baloncuk_color.replace('1)', '0.2)'));
-      
-      // Generate a complementary accent color
-      let [r, g, b] = baloncuk_color.match(/\d+/g).map(Number);
-      let accentColor = `rgb(${255-r}, ${255-g}, ${b})`;
-      document.documentElement.style.setProperty('--accent-color', accentColor);
-    }
-    
-    // Call this after setting baloncuk_color
-    document.addEventListener('DOMContentLoaded', function() {
-      updateThemeColors();
-    });
-  </script>
-  <script>
-    // ...existing code...
-    
-    // Update the CSS variables for the new design with fixed contrast
-    function updateThemeColors() {
-      // Set text color to be always visible against the card background
-      let [r, g, b] = baloncuk_color.match(/\d+/g).map(Number);
-      let brightness = (r * 299 + g * 587 + b * 114) / 1000;
-      
-      // If background is dark, use light text, and vice versa
-      let textColor = brightness > 128 ? '#121212a8' : '#97979788';
-
-      let textColor2 = brightness > 128 ? '#ffffff' : '#000000';
-
-      
-      document.documentElement.style.setProperty('--text-color', textColor);
-      document.documentElement.style.setProperty('--text-color-2', textColor2);
-      
-      document.documentElement.style.setProperty('--card-bg-color', baloncuk_color.replace('1)', '0.8)'));
-      document.documentElement.style.setProperty('--card-hover-bg', reverse_baloncuk_color.replace('1)', '0.2)'));
-      
-
-    }
-    
-    // Call this after setting baloncuk_color
-    document.addEventListener('DOMContentLoaded', function() {
-      updateThemeColors();
-    });
-  </script>
+        // Add particles to the background
+        const particlesCount = 2000;
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesPositions = new Float32Array(particlesCount * 3);
+        
+        for (let i = 0; i < particlesCount * 3; i++) {
+            particlesPositions[i] = (Math.random() - 0.5) * 20;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPositions, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.05,
+            transparent: true,
+            opacity: 0.7
+        });
+        
+        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particles);
+        
+        // Link name display element
+        const linkNameElement = document.getElementById('link-name');
+        
+        // Simple animation function
+        function animateObject(obj, targetScale, targetY, duration, callback) {
+            // Cancel any existing animation
+            if (obj.userData.animationFrameId) {
+                cancelAnimationFrame(obj.userData.animationFrameId);
+            }
+            
+            const startTime = performance.now();
+            const startScale = { x: obj.scale.x, y: obj.scale.y, z: obj.scale.z };
+            const startY = obj.position.y;
+            
+            obj.userData.isAnimating = true;
+            
+            function animate(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+                
+                // Update scale
+                obj.scale.x = startScale.x + (targetScale - startScale.x) * ease;
+                obj.scale.y = startScale.y + (targetScale - startScale.y) * ease;
+                obj.scale.z = startScale.z + (targetScale - startScale.z) * ease;
+                
+                // Update position
+                obj.position.y = startY + (targetY - startY) * ease;
+                
+                if (progress < 1) {
+                    obj.userData.animationFrameId = requestAnimationFrame(animate);
+                } else {
+                    obj.userData.isAnimating = false;
+                    if (callback) callback();
+                }
+            }
+            
+            obj.userData.animationFrameId = requestAnimationFrame(animate);
+        }
+        
+        // Show a specific object with smooth transition - Increased scale for STL models
+        function showObject(index) {
+            if (index < 0 || index >= objects.length) return;
+            
+            // Hide current object if any
+            if (currentIndex >= 0 && currentIndex < objects.length && currentIndex !== index) {
+                const prevObj = objects[currentIndex];
+                prevObj.visible = true;
+                
+                // Different animation based on scroll direction
+                if (scrollDirection > 0) {
+                    // Moving down - current object moves up
+                    animateObject(prevObj, 0.5, 5, 800, () => {
+                        prevObj.visible = false;
+                    });
+                } else {
+                    // Moving up - current object moves down
+                    animateObject(prevObj, 0.5, -5, 800, () => {
+                        prevObj.visible = false;
+                    });
+                }
+            }
+            
+            // Show new object
+            const obj = objects[index];
+            obj.visible = true;
+            
+            // Larger scale for all STL models
+            const targetScale = 5.5;  // Increased size from 2 to 3.5
+            
+            if (scrollDirection > 0) {
+                // Coming from below
+                obj.position.y = -5;
+                obj.scale.set(targetScale * 0.5, targetScale * 0.5, targetScale * 0.5);
+            } else {
+                // Coming from above
+                obj.position.y = 5;
+                obj.scale.set(targetScale * 0.5, targetScale * 0.5, targetScale * 0.5);
+            }
+            
+            // Animate to center with appropriate scale
+            animateObject(obj, targetScale, 0, 800);
+            
+            currentIndex = index;
+        }
+        
+        // Smooth scroll handling
+        function updateScrollProgress() {
+            const windowHeight = window.innerHeight;
+            const totalHeight = document.body.scrollHeight;
+            
+            // Calculate how far into the current section we are (0-1)
+            const rawIndex = scrollY / windowHeight - 1;
+            const index = Math.floor(rawIndex);
+            scrollProgress = rawIndex - index;
+            
+            return {
+                index: Math.min(Math.max(index, -1), links.length - 1),
+                progress: scrollProgress
+            };
+        }
+        
+        // Modified scroll handler with looping
+        function handleScroll() {
+            // Get previous position to determine direction
+            prevScrollY = scrollY;
+            scrollY = window.scrollY;
+            
+            // Check if we've reached the bottom of the page
+            if (scrollY + window.innerHeight >= document.body.scrollHeight - 10) {
+                // Loop back to the top (after the landing page)
+                window.scrollTo(0, window.innerHeight);
+                scrollY = window.innerHeight;
+                prevScrollY = 0;
+            }
+            
+            // Determine scroll direction
+            scrollDirection = scrollY > prevScrollY ? 1 : (scrollY < prevScrollY ? -1 : 0);
+            
+            // Affect rotation speed based on scroll intensity
+            const scrollDelta = Math.abs(scrollY - prevScrollY);
+            if (scrollDelta > 10) {
+                rotationSpeed = 2 + scrollDelta / 120; // Increase rotation speed during scroll
+                rotationSpeedResetTime = 0;
+                lastScrollTime = performance.now(); // Track when last scroll occurred
+            }
+            
+            const { index } = updateScrollProgress();
+            
+            // Check if we're scrolling back to the landing page
+            if (index === -1 && currentIndex >= 0) {
+                // Hide current object when returning to landing page
+                const currentObj = objects[currentIndex];
+                currentObj.visible = true;
+                
+                // Animate object moving downward out of view
+                animateObject(currentObj, 0.5, -5, 800, () => {
+                    currentObj.visible = false;
+                });
+                
+                // Reset current index to indicate we're on the landing page
+                currentIndex = -1;
+                return;
+            }
+            
+            // Only change object if we've moved to a new section
+            if (index >= 0 && index !== currentIndex) {
+                targetIndex = index;
+                showObject(targetIndex);
+            }
+            
+            // Update current object position based on scroll progress
+            if (currentIndex >= 0 && currentIndex < objects.length) {
+                const obj = objects[currentIndex];
+                if (obj.visible && !obj.userData.isAnimating) {
+                    // Add subtle movement based on scroll position within section
+                    const windowHeight = window.innerHeight;
+                    const sectionScrollY = scrollY - (windowHeight * (currentIndex + 1));
+                    const normalizedPosition = (sectionScrollY / windowHeight) * 0.5; // Range of movement
+                    
+                    // Small position adjustment based on scroll
+                    obj.position.y = normalizedPosition;
+                }
+            }
+        }
+        
+        // Variables for rotation axis based on mouse position
+        let rotationAxis = new THREE.Vector3(1, 1, 1).normalize();
+        let targetRotationAxis = new THREE.Vector3(1, 1, 1).normalize();
+        
+        // Mouse movement handler with water ripple effect and rotation axis update
+        function handleMouseMove(event) {
+            const prevMouseX = mouseX;
+            const prevMouseY = mouseY;
+            
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            mouse.x = mouseX;
+            mouse.y = mouseY;
+            
+            // Update the rotation axis based on mouse position
+            // This creates a 3D vector pointing from center towards mouse position
+            targetRotationAxis.set(mouseX, mouseY, 1).normalize();
+            
+            // Create water ripple effect (at a throttled rate)
+            if (!lastRippleTime || performance.now() - lastRippleTime > 100) {
+                createRipple(event.clientX, event.clientY);
+                lastRippleTime = performance.now();
+            }
+        }
+        
+        // Click handler
+        function handleClick() {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(objects);
+            
+            if (intersects.length > 0) {
+                const object = intersects[0].object;
+                if (object.userData.isLink && object.scale.x > 0.5) {
+                    window.open(object.userData.url, '_blank');
+                }
+            }
+        }
+        
+        // Variables for rotation animation
+        let rotationSpeed = 0.5;
+        let defaultRotationSpeed = 0.5; // Store the default rotation speed
+        let rotationSpeedResetTime = 0;
+        let lastRippleTime = 0;
+        let lastScrollTime = 0; // Track when the last scroll event occurred
+        
+        // Enhanced animation loop with mouse-based rotation axis
+        function animate() {
+            const currentTime = performance.now();
+            requestAnimationFrame(animate);
+            
+            // Extra debug for STL visibility
+            if (currentIndex === 0 && objects.length > 0) {
+                const obj = objects[0];
+                if (obj && !obj.debugLogged) {
+                    console.log('STL object in view:', 
+                                'visible=', obj.visible, 
+                                'position=', obj.position.y,
+                                'scale=', obj.scale.x);
+                    obj.debugLogged = true;
+                }
+            }
+            
+            targetX = mouseX * 0.3;
+            targetY = mouseY * 0.3;
+            
+            // More subtle, controlled 3D mouse interactions with models
+            if (currentIndex >= 0 && currentIndex < objects.length) {
+                const obj = objects[currentIndex];
+                if (obj.visible && !obj.userData.isAnimating) {
+                    // Add only subtle tilt based on mouse position
+                    obj.rotation.y = targetX * 2.8;
+                    obj.rotation.x = targetY * 2.1;
+                }
+            }
+            
+            // Handle hover effects
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(objects);
+            
+            document.body.style.cursor = 'default';
+            
+            if (hoveredObject) {
+                linkNameElement.style.opacity = '0';
+                hoveredObject.material.emissive.set(0x000000);
+                hoveredObject = null;
+            }
+            
+            if (intersects.length > 0) {
+                const object = intersects[0].object;
+                if (object.userData.isLink && object.visible && object.scale.x > 0.5) {
+                    document.body.style.cursor = 'pointer';
+                    object.material.emissive.set(0x333333);
+                    linkNameElement.textContent = object.userData.text;
+                    linkNameElement.style.opacity = '1';
+                    hoveredObject = object;
+                }
+            }
+            
+            // Smoothly update the rotation axis
+            rotationAxis.lerp(targetRotationAxis, 0.03);
+            
+            // Gradually reduce rotation speed over time if no scroll activity
+            if (lastScrollTime > 0 && currentTime - lastScrollTime > 300) { // Check if it's been 300ms since last scroll
+                // Calculate how much to decrease the speed based on time since last scroll
+                const decreaseFactor = Math.min(1, (currentTime - lastScrollTime) / 2000); // Takes 2 seconds to fully slow down
+                
+                // Interpolate between current speed and default speed
+                rotationSpeed = rotationSpeed - (rotationSpeed - defaultRotationSpeed) * decreaseFactor * 0.05;
+                
+                // If we're very close to default speed, just set it
+                if (Math.abs(rotationSpeed - defaultRotationSpeed) < 0.05) {
+                    rotationSpeed = defaultRotationSpeed;
+                }
+            }
+            
+            // Rotate particles around axis determined by mouse position
+            const rotationAngle = 0.005 * rotationSpeed;
+            
+            // Apply quaternion rotation around the dynamic axis
+            const quaternion = new THREE.Quaternion();
+            quaternion.setFromAxisAngle(rotationAxis, rotationAngle);
+            particles.quaternion.multiply(quaternion);
+            
+            // Scene subtle rotation based on mouse - smoother with lerping
+            scene.rotation.x += (targetY * 0.05 - scene.rotation.x) * 0.01;
+            scene.rotation.y += (targetX * 0.05 - scene.rotation.y) * 0.01;
+            
+            // Draw water ripples
+            drawRipples();
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Add debug info to help troubleshoot
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded. Looking for STL file at: ' + window.location.href.replace(/\/[^\/]*$/, '/3d.stl'));
+            
+            // Setup ripple effect
+            setupRippleEffect();
+            
+            // Scroll to top on page load/refresh
+            window.scrollTo(0, 0);
+            
+            // Check if objects are created after a short delay
+            setTimeout(function() {
+                console.log('Objects array length: ' + objects.length);
+                if (objects.length > 0) {
+                    console.log('First object geometry: ', objects[0].geometry);
+                }
+            }, 2000);
+        });
+        
+        // Window resize handler with ripple canvas update
+        function handleResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Resize ripple canvas
+            rippleCanvas.width = window.innerWidth;
+            rippleCanvas.height = window.innerHeight;
+        }
+        
+        // Handle touch events for mobile with ripple effect and rotation
+        function handleTouchMove(event) {
+            if (event.touches.length > 0) {
+                mouseX = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+                
+                mouse.x = mouseX;
+                mouse.y = mouseY;
+                
+                // Update rotation axis for touch events too
+                targetRotationAxis.set(mouseX, mouseY, 1).normalize();
+                
+                // Create water ripple effect for touch
+                if (!lastRippleTime || performance.now() - lastRippleTime > 100) {
+                    createRipple(event.touches[0].clientX, event.touches[0].clientY);
+                    lastRippleTime = performance.now();
+                }
+            }
+        }
+        
+        // Event listeners
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('click', handleClick);
+        window.addEventListener('touchmove', handleTouchMove);
+        window.addEventListener('touchstart', handleTouchMove);
+        window.addEventListener('resize', handleResize);
+        
+        // Initialize
+        handleScroll();
+        animate();
+        
+        // Enhanced lighting to better show the white model
+        // Add a new spotlight aimed directly at the center
+        const spotLight = new THREE.SpotLight(0xffffff, 1.5);
+        spotLight.position.set(0, 5, 10);
+        spotLight.angle = Math.PI / 6;
+        spotLight.penumbra = 0.2;
+        spotLight.decay = 0;
+        spotLight.distance = 0;
+        spotLight.target.position.set(0, 0, 0);
+        scene.add(spotLight);
+        scene.add(spotLight.target);
+        
+        // Enhanced lighting specifically for better detail visibility
+        // Add a key light from one side
+        const keyLight = new THREE.DirectionalLight(0xFFFFFF, 1.5);
+        keyLight.position.set(5, 5, 5);
+        scene.add(keyLight);
+        
+        // Add a fill light from the opposite side (softer)
+        const fillLight = new THREE.DirectionalLight(0xFFFFFF, 0.7);
+        fillLight.position.set(-5, 3, 5);
+        scene.add(fillLight);
+        
+        // Add a rim light from behind to highlight edges
+        const rimLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+        rimLight.position.set(0, -5, -5);
+        scene.add(rimLight);
+        
+        // Add a rotation debug helper function
+        window.rotateModel = function(x, y, z) {
+            if (objects.length > 0) {
+                const obj = objects[0];
+                // Apply fixed rotation (no animation)
+                if (x !== undefined) obj.rotation.x = x;
+                if (y !== undefined) obj.rotation.y = y;
+                if (z !== undefined) obj.rotation.z = z;
+                
+                // Update initial rotation
+                obj.userData.initialRotation = {
+                    x: obj.rotation.x,
+                    y: obj.rotation.y,
+                    z: obj.rotation.z
+                };
+                
+                console.log('Fixed rotation set:', obj.rotation);
+                return obj.rotation;
+            }
+            return null;
+        };
+    </script>
 </body>
 </html>
 
