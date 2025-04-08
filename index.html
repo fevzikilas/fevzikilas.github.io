@@ -690,8 +690,8 @@
                 const obj = objects[currentIndex];
                 if (obj.visible && !obj.userData.isAnimating) {
                     // Add only subtle tilt based on mouse position
-                    obj.rotation.y = targetX * 2.8;
-                    obj.rotation.x = targetY * 2.1;
+                    obj.rotation.y = targetX * 0.3;
+                    obj.rotation.x = targetY * -4.0;
                 }
             }
             
@@ -753,24 +753,7 @@
             renderer.render(scene, camera);
         }
         
-        // Add debug info to help troubleshoot
-        window.addEventListener('DOMContentLoaded', function() {
-            console.log('Page loaded. Looking for STL file at: ' + window.location.href.replace(/\/[^\/]*$/, '/3d.stl'));
-            
-            // Setup ripple effect
-            setupRippleEffect();
-            
-            // Scroll to top on page load/refresh
-            window.scrollTo(0, 0);
-            
-            // Check if objects are created after a short delay
-            setTimeout(function() {
-                console.log('Objects array length: ' + objects.length);
-                if (objects.length > 0) {
-                    console.log('First object geometry: ', objects[0].geometry);
-                }
-            }, 2000);
-        });
+   
         
         // Window resize handler with ripple canvas update
         function handleResize() {
