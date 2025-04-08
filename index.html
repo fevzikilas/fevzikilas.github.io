@@ -12,6 +12,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
         
         body {
@@ -21,15 +23,15 @@
             color: #fff;
             height: 1600vh; /* Height for all sections */
             cursor: pointer;
-            /* Hide scrollbar but keep scrolling functionality */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
+
         }
         
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        body::-webkit-scrollbar {
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            background: transparent;
             display: none;
-        }
+            }
         
         canvas {
             position: fixed;
