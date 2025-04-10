@@ -117,6 +117,250 @@
             font-family: 'Arial', sans-serif;
             text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
         }
+        
+        /* Sidebar styles for Latest Projects and Latest Blogs */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            z-index: 200;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        /* 3D Button to toggle sidebar */
+        .sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            z-index: 300;
+            cursor: pointer;
+        }
+        
+        .sidebar-toggle canvas {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 301;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-section h3 {
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .sidebar-item {
+            margin-bottom: 15px;
+            transition: transform 0.2s ease;
+        }
+        
+        .sidebar-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .sidebar-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            line-height: 1.3;
+        }
+        
+        .sidebar-item a:hover {
+            color: #fff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        .sidebar-date {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 180px;
+                transform: translateX(160px);
+            }
+        }
+
+        /* Right side panels for websites and blogs */
+        .right-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100vh;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        /* Right panel toggle button */
+        .right-panel-toggle {
+            position: fixed;
+            top: 50%;
+            right: 280px; /* Initial position when panel is visible */
+            transform: translateY(-50%);
+            width: 30px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 5px 0 0 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 91;
+            transition: right 0.3s ease-in-out;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .right-panel-toggle span {
+            color: #fff;
+            font-size: 23px;
+            font-weight: bold;
+            transform: scaleX(0.5);
+        }
+        
+        .right-panel.collapsed {
+            transform: translateX(100%);
+        }
+        
+        .right-panel-toggle.collapsed {
+            right: 0;
+        }
+        
+        .panel-section {
+            margin-bottom: 15px;
+        }
+        
+        .panel-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Website button styles */
+        .website-btn {
+            display: block;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .website-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Blog card styles */
+        .blog-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .blog-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .blog-content {
+            padding: 10px;
+        }
+        
+        .blog-title {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .blog-description {
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .blog-details-btn {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .blog-details-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Hide right panel on small screens */
+        @media (max-width: 1024px) {
+            .right-panel {
+                width: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .right-panel {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -124,7 +368,7 @@
     
     <section id="landing">
         <h1 class="title">Fevzi KILAS</h1>
-        <p class="subtitle">ML Engineer</p>
+        <p class="subtitle">AI Enthusiast</p>
         <div class="scroll-indicator">↓</div>
     </section>
     
@@ -133,6 +377,41 @@
     
     <!-- Copyright notice -->
     <div class="copyright">© 2025 All Rights Reserved</div>
+    
+    <!-- Right panel toggle button -->
+    <div class="right-panel-toggle" id="right-panel-toggle">
+        <span>&gt; </span>
+    </div>
+    
+    <!-- Right side panel for websites and blogs -->
+    <div class="right-panel" id="right-panel">
+        <!-- Latest websites section -->
+        <div class="panel-section">
+            <br><br><br>
+            <h3 class="panel-title">Latest Projects</h3>
+            <a href=" https://fevzikilas.tech/lab/" class="website-btn">LAB</a>
+            <a href="https://fevzikilas.tech/easy2read/" class="website-btn">Paper Notes</a>
+           
+        </div>
+        
+        <!-- Latest blogs section -->
+        <div class="panel-section">
+            <h3 class="panel-title">Latest Blogs</h3>
+            
+            <div class="blog-card">
+                <img src="https://i.giphy.com/4QTRR1Dhxp3zi.webp" alt="Time Series Forecasting" class="blog-image">
+                <div class="blog-content">
+                    <h4 class="blog-title">Time Series Forecasting with Transformers</h4>
+                    <p class="blog-description">Explore how transformer models are revolutionizing time series forecasting tasks with higher accuracy and efficiency.</p>
+                    <a href="https://fevzikilas.github.io/TSF" class="blog-details-btn">See Details</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+
+  
     
     <script>
         // Update the links array with model information
@@ -152,7 +431,7 @@
             { url: "https://fevzikilas.github.io/BlobCapture", text: "Blob Capture", model: "blob.stl" },
             { url: "https://fevzikilas.github.io/Prototune_data_preparation", text: "Prototune", model: "prottotune.stl" },
             { url: "https://loncam.github.io/", text: "Lonca", model: "lonca.stl" },
-            { url: "https://fevzikilas.github.io/skin_cancer_model_ISIC2016", text: "Skin Cancer Classification", model: "skincancer.stl" }
+            { url: "https://fevzikilas.github.io/skin_cancer_model_ISIC2016", text: "Skin Cancer Classification", model: "skincancer.stl" },
         ];
         
         // Create link sections (just for scroll purposes)
@@ -369,13 +648,24 @@
         camera.add(pointLight);
         scene.add(camera);
         
-        // Colors for the objects - vibrant colors for STL models
+        // Colors for the objects - shades of red for STL models
         const colors = [
-            0x3357FF, // First color for first STL model
-            0xFF5733, 0x33FF57, 0xF3FF33, 
-            0xFF33F3, 0x33FFF3, 0xF333FF, 0x33F3FF,
-            0xF3F333, 0xF33F33, 0x3F33F3, 0x33F3F3,
-            0xF33333, 0x33F333, 0x3333F3, 0xFFFFFF
+            0xFF0000, // Pure red
+            0x8B0000, // Dark red
+            0xDC143C, // Crimson
+            0xCD5C5C, // Indian red
+            0xB22222, // Fire brick
+            0xA52A2A, // Brown
+            0x800000, // Maroon
+            0xE9967A, // Dark salmon
+            0xFA8072, // Salmon
+            0xF08080, // Light coral
+            0xA52A2A, // Red-brown
+            0xB7410E, // Rust red
+            0xFF6347, // Tomato
+            0xFF7F50, // Coral
+            0x660000, // Blood red
+            0xFF2800  // Ferrari red
         ];
         
         // Create objects array with placeholders
@@ -767,6 +1057,23 @@
             rippleCanvas.width = window.innerWidth;
             rippleCanvas.height = window.innerHeight;
         }
+        
+        // Right panel toggle functionality
+        const rightPanelToggle = document.getElementById('right-panel-toggle');
+        const rightPanel = document.getElementById('right-panel');
+        
+        rightPanelToggle.addEventListener('click', () => {
+            rightPanel.classList.toggle('collapsed');
+            rightPanelToggle.classList.toggle('collapsed');
+            
+            // Update toggle button content based on state
+            const toggleSpan = rightPanelToggle.querySelector('span');
+            if (rightPanel.classList.contains('collapsed')) {
+                toggleSpan.textContent = '<';
+            } else {
+                toggleSpan.textContent = '>';
+            }
+        });
         
         // Handle touch events for mobile with ripple effect and rotation
         function handleTouchMove(event) {
