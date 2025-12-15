@@ -2,1170 +2,461 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=3.0">
-    <title>💀⛩️💮🎉♾️👀</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <!-- Add STL Loader -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/STLLoader.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Viewer</title>
     <style>
-        * {
+        :root {
+            --nav-height: 60px;
+
+            
+            --bg-color-light: #fff;
+            --text-color-light: #3c4043;
+            --border-color-light: #dadce0;
+            --active-bg-light: #e8f0fe;
+            --active-text-light: #1967d2;
+            --hover-bg-light: #f1f3f4;
+            --logo-text-light: #202124;
+            --sheet-item-text-light: #5f6368;
+
+            
+            --bg-color-dark: #202124;
+            --text-color-dark: #e8eaed;
+            --border-color-dark: #3c4043;
+            --active-bg-dark: #313a4c;
+            --active-text-dark: #8ab4f8;
+            --hover-bg-dark: #3c4043;
+            --logo-text-dark: #e8eaed;
+            --sheet-item-text-dark: #bdc1c6;
+        }
+
+        body {
             margin: 0;
-            padding: 0;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background: var(--bg-color-light);
+            color: var(--text-color-light);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        
+        nav {
+            height: var(--nav-height);
+            width: 100%;
+            background: var(--bg-color-light);
+            border-bottom: 1px solid var(--border-color-light);
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 10;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            padding: 0 24px;
             box-sizing: border-box;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.dark-mode nav {
+            background: var(--bg-color-dark);
+            border-bottom-color: var(--border-color-dark);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 22px;
+            color: var(--logo-text-light);
+            margin-right: 32px;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+        
+        body.dark-mode .logo {
+            color: var(--logo-text-dark);
+        }
+
+        .logo span {
+            color: var(--active-text-light);
+        }
+        body.dark-mode .logo span {
+            color: var(--active-text-dark);
+        }
+
+        #sheet-list {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0;
+            height: 100%;
+            
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
         
-        body {
-            font-family: 'Arial', sans-serif;
-            overflow-x: hidden;
-            background-color: #000;
-            color: #fff;
-            height: 1600vh; /* Height for all sections */
-            cursor: pointer;
-
-        }
-        
-        ::-webkit-scrollbar {
-            width: 0;
-            height: 0;
-            background: transparent;
+        #sheet-list::-webkit-scrollbar { 
             display: none;
-            }
+        }
+
+        .sheet-item {
+            padding: 0 20px;
+            cursor: pointer;
+            font-size: 14px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            color: var(--sheet-item-text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            box-sizing: border-box;
+            font-weight: 500;
+        }
+
+        body.dark-mode .sheet-item {
+            color: var(--sheet-item-text-dark);
+        }
+
+        .sheet-item:hover {
+            background: var(--hover-bg-light);
+            color: var(--logo-text-light);
+        }
+
+        body.dark-mode .sheet-item:hover {
+            background: var(--hover-bg-dark);
+            color: var(--logo-text-dark);
+        }
+
+        .sheet-item.active {
+            background: var(--active-bg-light);
+            color: var(--active-text-light);
+            border-bottom-color: var(--active-text-light);
+        }
+
+        body.dark-mode .sheet-item.active {
+            background: var(--active-bg-dark);
+            color: var(--active-text-dark);
+            border-bottom-color: var(--active-text-dark);
+        }
+
         
-        canvas {
-            position: fixed;
+        main {
+            flex: 1;
+            background: var(--bg-color-light);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode main {
+            background: var(--bg-color-dark);
+        }
+
+        
+        .iframe-container {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-        }
-        
-        #landing {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-        
-        .title {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-        
-        .subtitle {
-            font-size: 1.8rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-        }
-        
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2rem;
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0) translateX(-50%);
-            }
-            40% {
-                transform: translateY(-30px) translateX(-50%);
-            }
-            60% {
-                transform: translateY(-15px) translateX(-50%);
-            }
-        }
-        
-        .link-section {
-            height: 100vh;
-            position: relative;
-        }
-        
-        #link-name {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, 150px);
-            font-size: 1.8rem;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
             opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 100;
             pointer-events: none;
-        }
-        
-        /* Copyright notice style */
-        .copyright {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            font-size: 0.3rem;
-            color: rgba(255, 255, 255, 0.4);
-            z-index: 100;
-            pointer-events: none;
-            font-family: 'Arial', sans-serif;
-            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        /* Sidebar styles for Latest Projects and Latest Blogs */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 250px;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            z-index: 200;
-            overflow-y: auto;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        }
-        
-        .sidebar.open {
-            transform: translateX(0);
-        }
-        
-        /* 3D Button to toggle sidebar */
-        .sidebar-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            z-index: 300;
-            cursor: pointer;
-        }
-        
-        .sidebar-toggle canvas {
-            width: 50px;
-            height: 50px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 301;
-        }
-        
-        .sidebar-section {
-            margin-bottom: 30px;
-        }
-        
-        .sidebar-section h3 {
-            font-size: 1.2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 8px;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-        
-        .sidebar-item {
-            margin-bottom: 15px;
-            transition: transform 0.2s ease;
-        }
-        
-        .sidebar-item:hover {
-            transform: translateX(5px);
-        }
-        
-        .sidebar-item a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: block;
-            line-height: 1.3;
-        }
-        
-        .sidebar-item a:hover {
-            color: #fff;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-        }
-        
-        .sidebar-date {
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 2px;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 180px;
-                transform: translateX(160px);
-            }
+            transition: opacity 0.2s ease;
+            z-index: 0;
+            background: #fff;
+            overflow: hidden; 
         }
 
-        /* Right side panels for websites and blogs */
-        .right-panel {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 280px;
-            height: 100vh;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            overflow-y: auto;
-            z-index: 90;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            transition: transform 0.3s ease-in-out;
+        .iframe-container.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 1;
         }
+
         
-        /* Right panel toggle button */
-        .right-panel-toggle {
-            position: fixed;
+        iframe {
+            width: 142.85%;  
+            height: 142.85%; 
+            border: none;
+            display: block;
+            transform: scale(0.7);
+            transform-origin: 0 0;
+            transition: filter 0.4s ease;
+        }
+
+        body.dark-mode iframe {
+            filter: invert(0.9) hue-rotate(180deg);
+        }
+
+        
+        .status-msg {
+            position: absolute;
             top: 50%;
-            right: 280px; /* Initial position when panel is visible */
-            transform: translateY(-50%);
-            width: 30px;
-            height: 60px;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            border-radius: 5px 0 0 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 91;
-            transition: right 0.3s ease-in-out;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #5f6368;
+            z-index: 100;
+            pointer-events: none;
         }
-        
-        .right-panel-toggle span {
-            color: #fff;
-            font-size: 23px;
-            font-weight: bold;
-            transform: scaleX(0.5);
-        }
-        
-        .right-panel.collapsed {
-            transform: translateX(100%);
-        }
-        
-        .right-panel-toggle.collapsed {
-            right: 0;
-        }
-        
-        .panel-section {
-            margin-bottom: 15px;
-        }
-        
-        .panel-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        /* Website button styles */
-        .website-btn {
-            display: block;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .website-btn:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(-5px);
-            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Blog card styles */
-        .blog-card {
-            background-color: rgba(255, 255, 255, 0.05);
+
+        .error-box {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fce8e6;
+            border: 1px solid #fad2cf;
             border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
+            color: #c5221f;
+            text-align: left;
+            z-index: 100;
+            position: relative;
         }
         
-        .blog-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .blog-image {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
+        .error-title {
+            font-weight: bold;
+            margin-bottom: 8px;
             display: block;
         }
+
         
-        .blog-content {
-            padding: 10px;
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
         }
-        
-        .blog-title {
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .blog-description {
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-            color: rgba(255, 255, 255, 0.7);
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .blog-details-btn {
+
+        .theme-switch {
             display: inline-block;
-            background-color: rgba(255, 255, 255, 0.15);
-            color: #fff;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
+            height: 24px;
+            position: relative;
+            width: 44px;
         }
-        
-        .blog-details-btn:hover {
-            background-color: rgba(255, 255, 255, 0.3);
+
+        .theme-switch input {
+            display:none;
         }
-        
-        /* Hide right panel on small screens */
-        @media (max-width: 1024px) {
-            .right-panel {
-                width: 200px;
-            }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 24px;
         }
-        
-        @media (max-width: 768px) {
-            .right-panel {
-                display: none;
-            }
+
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--active-text-dark);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
         }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
-    
-    <section id="landing">
-        <h1 class="title">Fevzi KILAS</h1>
-        <p class="subtitle">AI Enthusiast</p>
-        <div class="scroll-indicator">↓</div>
-    </section>
-    
-    <!-- Info about current 3D object link -->
-    <div id="link-name"></div>
-    
-    <!-- Copyright notice -->
-    <div class="copyright">© 2025 All Rights Reserved</div>
-    
-    <!-- Right panel toggle button -->
-    <div class="right-panel-toggle" id="right-panel-toggle">
-        <span>&gt; </span>
+
+<nav>
+    <div class="logo">⛩️⛩️</div>
+    <div id="sheet-list"></div>
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider"></div>
+        </label>
     </div>
-    
-    <!-- Right side panel for websites and blogs -->
-    <div class="right-panel" id="right-panel">
-        <!-- Latest websites section -->
-        <div class="panel-section">
-            <br><br><br>
-            <h3 class="panel-title">Latest Projects</h3>
-            <a href=" https://fevzikilas.tech/lab/" class="website-btn">LAB</a>
-            <a href="https://fevzikilas.tech/easy2read/" class="website-btn">Paper Notes</a>
-            
-           
-        </div>
+</nav>
+
+<main id="main-area">
+    <div id="loading-msg" class="status-msg">Initializing...</div>
+</main>
+
+<script>
+    const CONFIG = {
+        spreadsheetId: "1_O3TO0W9DLGGqslIMG3NZCqdSOMk0W-7FpIabfg03fA",
+        apiKey: "AIzaSyBzVqt9DxS4BxteZnIbQLHDbytnw5nJVCQ",
+        publishedId: "2PACX-1vRwtMFlNrApnyn6n75k093SRTbZA-SV73TvEe8aCfIfpOK8Irxwc8KRhdgQDTfaeD0M8zH2_jHFJ5_e" 
+    };
+
+    const els = {
+        sheetList: document.getElementById('sheet-list'),
+        main: document.getElementById('main-area'),
+        loadingMsg: document.getElementById('loading-msg')
+    };
+
+    let sheets = [];
+    let activeSheetId = null;
+    const loadedSheets = new Set();
+
+    async function init() {
+        setupTheme();
+
+        if (CONFIG.publishedId === "YOUR_PUBLISHED_ID_HERE") {
+            showError("Configuration Required", "Please update the publishedId.");
+            return;
+        }
+
+        try {
+            await fetchMetadata();
+        } catch (err) {
+            showError("Initialization Failed", err.message);
+        }
+    }
+
+    async function fetchMetadata() {
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.spreadsheetId}?fields=properties.title,sheets.properties(title,sheetId)&key=${CONFIG.apiKey}`;
         
-        <!-- Latest blogs section -->
-        <div class="panel-section">
-            <h3 class="panel-title">Latest Works & Blogs</h3>
-            <div class="blog-card">
-                <img src="https://i.pinimg.com/originals/00/a2/0a/00a20a67bc0bdbdb698ed0ee7a1cd5db.gif" alt="Time Series Forecasting" class="blog-image">
-                <div class="blog-content">
-                    <h4 class="blog-title">NLTK Notes</h4>
-                    <p class="blog-description">Exploring the NLTK library.</p>
-                    <a href="https://fevzikilas.github.io/nltk-notes" class="blog-details-btn">See Details</a>
-                </div>
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.error?.message || `API Error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            document.title = data.properties.title;
+
+            sheets = (data.sheets || []).map(s => ({
+                title: s.properties.title,
+                id: s.properties.sheetId
+            }));
+
+            if (sheets.length === 0) throw new Error("No sheets found.");
+
+            renderNavbar();
+            
+            activateSheet(sheets[0].id);
+            
+            setTimeout(preloadAllSheets, 2000);
+
+        } catch (error) {
+            console.error(error);
+            showError("Error", error.message);
+        }
+    }
+
+    function renderNavbar() {
+        els.sheetList.innerHTML = '';
+        
+        sheets.forEach(sheet => {
+            const item = document.createElement('div');
+            item.className = 'sheet-item';
+            item.textContent = sheet.title;
+            item.dataset.id = sheet.id;
+            item.onclick = () => activateSheet(sheet.id);
+            els.sheetList.appendChild(item);
+        });
+    }
+
+    function activateSheet(gid) {
+        if (activeSheetId === gid) return;
+        
+        activeSheetId = gid;
+        document.querySelectorAll('.sheet-item').forEach(el => {
+            const isActive = el.dataset.id == gid;
+            el.classList.toggle('active', isActive);
+            if (isActive) el.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+        });
+
+        ensureIframe(gid);
+
+        document.querySelectorAll('.iframe-container').forEach(el => {
+            el.classList.toggle('active', el.dataset.id == gid);
+        });
+
+        els.loadingMsg.style.display = 'none';
+    }
+
+    function ensureIframe(gid) {
+        if (loadedSheets.has(gid)) return;
+
+        const container = document.createElement('div');
+        container.className = 'iframe-container';
+        container.dataset.id = gid;
+
+        const src = `https://docs.google.com/spreadsheets/d/e/${CONFIG.publishedId}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false`;
+        
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('loading', 'lazy');
+        iframe.src = src;
+        
+        container.appendChild(iframe);
+        els.main.appendChild(container);
+        
+        loadedSheets.add(gid);
+    }
+
+    function preloadAllSheets() {
+        console.log("Starting preload...");
+        let delay = 0;
+        
+        sheets.forEach(sheet => {
+            if (!loadedSheets.has(sheet.id)) {
+                setTimeout(() => {
+                    ensureIframe(sheet.id);
+                }, delay);
+                delay += 500;
+            }
+        });
+    }
+
+    function showError(title, message) {
+        els.main.innerHTML = `
+            <div class="error-box">
+                <span class="error-title">${title}</span>
+                <div>${message}</div>
             </div>
-            
-            <div class="blog-card">
-                <img src="https://i.giphy.com/4QTRR1Dhxp3zi.webp" alt="Time Series Forecasting" class="blog-image">
-                <div class="blog-content">
-                    <h4 class="blog-title">Time Series Forecasting with Transformers</h4>
-                    <p class="blog-description">Explore how transformer models are revolutionizing time series forecasting tasks with higher accuracy and efficiency.</p>
-                    <a href="https://fevzikilas.github.io/TSF" class="blog-details-btn">See Details</a>
-                </div>
-            </div>
+        `;
+    }
 
-        </div>
-    </div>
-    
-
-  
-    
-    <script>
-        // Update the links array with model information
-        const links = [
-            { url: "https://fevzikilas.github.io/blog-agent", text: "♾️ Agentic Blogs ♾️", model: "agentic-blog.stl" },
-            { url: "https://fevzikilas.github.io/flashcards", text: "⛩️ Flashcards ⛩️", model: "flashcard.stl" },
-            { url: "https://fevzikilas.github.io/neurapath", text: "💮 Neura Path 💮", model: "neuropath.stl" },
-            { url: "https://fevzikilas.github.io/MDLP", text: "MDLP 🌛", model: "mdlp.stl" },
-            { url: "https://fevzikilas.github.io/FON", text: "Focus 🤗", model: "focus.stl" },
-            { url: "https://fevzikilas.github.io/NOTES", text: "MY NOTES 😊", model: "mynotes.stl" },
-            { url: "https://fevzikilas.github.io/TSFM", text: "TSF Models", model: "tsf.stl" },
-            { url: "https://fevzikilas.github.io/TSF", text: "Time Series & More", model: "tsandmore.stl" },
-            { url: "https://fevzikilas.github.io/Pothole_detection", text: "Pothole Detection", model: "pothole.stl" },
-            { url: "https://fevzikilas.github.io/LLM_first_notebook", text: "General LLM works", model: "genllm.stl" },
-            { url: "https://fevzikilas.github.io/LLM_Tarim", text: "TARIM LLM", model: "tarimllm.stl" },
-            { url: "https://fevzikilas.github.io/classification", text: "Classification", model: "classification.stl" },
-            { url: "https://fevzikilas.github.io/BlobCapture", text: "Blob Capture", model: "blob.stl" },
-            { url: "https://fevzikilas.github.io/Prototune_data_preparation", text: "Prototune", model: "prottotune.stl" },
-            { url: "https://fevzikilas.github.io/skin_cancer_model_ISIC2016", text: "Skin Cancer Classification", model: "skincancer.stl" },
-        ];
+    function setupTheme() {
+        const toggle = document.getElementById('checkbox');
         
-        // Create link sections (just for scroll purposes)
-        links.forEach((link, index) => {
-            const section = document.createElement('section');
-            section.className = 'link-section';
-            section.id = `link-section-${index}`;
-            document.body.appendChild(section);
-        });
-        
-        // Start fresh - define all animation variables up front
-        let currentIndex = -1;
-        let scrollY = window.scrollY;
-        let prevScrollY = scrollY;
-        let scrollDirection = 0; // 0: none, 1: down, -1: up
-        let targetIndex = -1;
-        let scrollProgress = 0;
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetX = 0;
-        let targetY = 0;
-        
-        // Setup Three.js
-        const canvas = document.getElementById('canvas');
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
-        
-        // Setup raycaster for object interaction
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-        let hoveredObject = null;
-        
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-        
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(2, 2, 5);
-        scene.add(directionalLight);
-        
-        // Create an object to store loaded models by filename
-        const loadedModels = {};
-
-        // Function to load an STL model and create a mesh
-        function loadSTLModel(filename, index, callback) {
-            const stlLoader = new THREE.STLLoader();
-            stlLoader.load(filename, function(geometry) {
-                console.log(`STL ${filename} loaded - starting processing`);
-                try {
-                    // Make sure normals are computed properly
-                    geometry.computeVertexNormals();
-                    
-                    // Center the geometry
-                    geometry.center();
-                    
-                    // Compute the bounding box to adjust scale appropriately
-                    geometry.computeBoundingBox();
-                    const size = new THREE.Vector3();
-                    geometry.boundingBox.getSize(size);
-                    const maxDim = Math.max(size.x, size.y, size.z);
-                    const scale = 1.0 / maxDim;  // Scale to fit a unit cube
-                    
-                    // Apply scaling based on actual model dimensions
-                    geometry.scale(scale, scale, scale);
-                    
-                    console.log(`STL model ${filename} processed - details:`, 
-                                'Vertices:', geometry.attributes.position.count,
-                                'Size:', size);
-                    
-                    // Store the processed geometry
-                    loadedModels[filename] = geometry;
-                    
-                    if (callback) callback(geometry, index);
-                } catch (e) {
-                    console.error(`Error processing STL ${filename}:`, e);
-                    // Use a fallback geometry in case of error
-                    if (callback) callback(null, index);
-                }
-            }, 
-            // Progress callback
-            function(xhr) {
-                console.log(filename + ': ' + (xhr.loaded / xhr.total * 100) + '% loaded');
-            }, 
-            // Error callback
-            function(error) {
-                console.error('Failed to load STL:', filename, error);
-                // Use a fallback geometry in case of error
-                if (callback) callback(null, index);
-            });
-        }
-
-        // Modified code to create objects with STL models
-        function createObjectForLink(link, index) {
-            // Create material based on the object index
-            const material = new THREE.MeshStandardMaterial({
-                color: colors[index % colors.length],
-                metalness: 0.4,
-                roughness: 0.3,
-                emissive: 0x222222,
-                side: THREE.DoubleSide,
-                flatShading: false
-            });
-            
-            // If the model is already loaded, use it
-            let geometry;
-            if (loadedModels[link.model]) {
-                geometry = loadedModels[link.model];
+        toggle.addEventListener('change', () => {
+            if (toggle.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
             } else {
-                // If model isn't loaded, create a simple sphere as placeholder
-                geometry = new THREE.SphereGeometry(1, 16, 16);
-                console.warn(`Model ${link.model} not loaded, using placeholder.`);
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
             }
-            
-            // Create the mesh
-            const mesh = new THREE.Mesh(geometry, material);
-            mesh.position.set(0, -50, 0); // Start out of view
-            mesh.scale.set(0, 0, 0); // Start with no scale
-            mesh.userData = {
-                initialRotation: {
-                    x: 0,
-                    y: 0,
-                    z: 0
-                },
-                // Removed auto rotation properties
-                linkIndex: index,
-                url: link.url,
-                text: link.text,
-                model: link.model,
-                isLink: true,
-                isAnimating: false,
-                isStlModel: true
-            };
-            
-            mesh.rotation.x = mesh.userData.initialRotation.x;
-            mesh.rotation.y = mesh.userData.initialRotation.y;
-            mesh.rotation.z = mesh.userData.initialRotation.z;
-            mesh.visible = false;
-            
-            scene.add(mesh);
-            objects[index] = mesh;
-            
-            console.log(`Created object for link ${index}: ${link.text} with model ${link.model}`);
-        }
-
-        // Add water ripple effect
-        const rippleCanvas = document.createElement('canvas');
-        const rippleCtx = rippleCanvas.getContext('2d');
-        const ripples = [];
-        
-        // Setup ripple canvas
-        function setupRippleEffect() {
-            rippleCanvas.width = window.innerWidth;
-            rippleCanvas.height = window.innerHeight;
-            rippleCanvas.style.position = 'fixed';
-            rippleCanvas.style.top = '0';
-            rippleCanvas.style.left = '0';
-            rippleCanvas.style.pointerEvents = 'none';
-            rippleCanvas.style.zIndex = '100';
-            rippleCanvas.style.opacity = '0.7';
-            document.body.appendChild(rippleCanvas);
-        }
-        
-        // Create a ripple at mouse position
-        function createRipple(x, y) {
-            ripples.push({
-                x,
-                y,
-                radius: 5,
-                maxRadius: 40,
-                opacity: 0.5,
-                color: `rgba(255, 255, 255, 0.7)`
-            });
-        }
-        
-        // Draw ripples
-        function drawRipples() {
-            rippleCtx.clearRect(0, 0, rippleCanvas.width, rippleCanvas.height);
-            
-            for (let i = 0; i < ripples.length; i++) {
-                const ripple = ripples[i];
-                
-                // Draw ripple
-                rippleCtx.beginPath();
-                rippleCtx.strokeStyle = ripple.color;
-                rippleCtx.lineWidth = 2;
-                rippleCtx.globalAlpha = ripple.opacity;
-                rippleCtx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
-                rippleCtx.stroke();
-                
-                // Update ripple
-                ripple.radius += 1.5;
-                ripple.opacity -= 0.02;
-                
-                // Remove ripple if it's too big or too transparent
-                if (ripple.radius > ripple.maxRadius || ripple.opacity <= 0) {
-                    ripples.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        // Add more lighting to better illuminate the model
-        const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-        scene.add(hemisphereLight);
-        
-        // Add a point light that follows the camera
-        const pointLight = new THREE.PointLight(0xffffff, 1, 100);
-        pointLight.position.set(0, 0, 5);
-        camera.add(pointLight);
-        scene.add(camera);
-        
-        // Colors for the objects - shades of red for STL models
-        const colors = [
-            0xFF0000, // Pure red
-            0x8B0000, // Dark red
-            0xDC143C, // Crimson
-            0xCD5C5C, // Indian red
-            0xB22222, // Fire brick
-            0xA52A2A, // Brown
-            0x800000, // Maroon
-            0xE9967A, // Dark salmon
-            0xFA8072, // Salmon
-            0xF08080, // Light coral
-            0xA52A2A, // Red-brown
-            0xB7410E, // Rust red
-            0xFF6347, // Tomato
-            0xFF7F50, // Coral
-            0x660000, // Blood red
-            0xFF2800  // Ferrari red
-        ];
-        
-        // Create objects array with placeholders
-        const objects = new Array(links.length).fill(null);
-        
-        // Initialize objects with empty placeholder first
-        links.forEach((link, index) => {
-            // Create a placeholder sphere until the STL is loaded
-            const geometry = new THREE.SphereGeometry(1, 16, 16);
-            const material = new THREE.MeshPhongMaterial({
-                color: colors[index % colors.length],
-                shininess: 100,
-                specular: 0x444444,
-                transparent: true, 
-                opacity: 0.5
-            });
-            
-            const mesh = new THREE.Mesh(geometry, material);
-            mesh.position.set(0, -50, 0);
-            mesh.scale.set(0, 0, 0);
-            mesh.userData = {
-                initialRotation: {
-                    x: 0,
-                    y: 0,
-                    z: 0
-                },
-                linkIndex: index,
-                url: link.url,
-                text: link.text,
-                model: link.model,
-                isLink: true,
-                isAnimating: false
-            };
-            
-            mesh.rotation.x = mesh.userData.initialRotation.x;
-            mesh.rotation.y = mesh.userData.initialRotation.y;
-            mesh.rotation.z = mesh.userData.initialRotation.z;
-            mesh.visible = false;
-            
-            scene.add(mesh);
-            objects[index] = mesh;
-        });
-        
-        // Start loading all STL models
-        links.forEach((link, index) => {
-            loadSTLModel(link.model, index, function(geometry, idx) {
-                if (geometry) {
-                    // Once the model is loaded, update or create the object
-                    createObjectForLink(links[idx], idx);
-                    
-                    // If this is the current visible object, refresh it
-                    if (currentIndex === idx) {
-                        showObject(idx);
-                    }
-                }
-            });
         });
 
-        // Add particles to the background
-        const particlesCount = 2000;
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesPositions = new Float32Array(particlesCount * 3);
-        
-        for (let i = 0; i < particlesCount * 3; i++) {
-            particlesPositions[i] = (Math.random() - 0.5) * 20;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            toggle.checked = true;
+            document.body.classList.add('dark-mode');
         }
-        
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPositions, 3));
-        
-        const particlesMaterial = new THREE.PointsMaterial({
-            color: 0xffffff,
-            size: 0.05,
-            transparent: true,
-            opacity: 0.7
-        });
-        
-        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particles);
-        
-        // Link name display element
-        const linkNameElement = document.getElementById('link-name');
-        
-        // Simple animation function
-        function animateObject(obj, targetScale, targetY, duration, callback) {
-            // Cancel any existing animation
-            if (obj.userData.animationFrameId) {
-                cancelAnimationFrame(obj.userData.animationFrameId);
-            }
-            
-            const startTime = performance.now();
-            const startScale = { x: obj.scale.x, y: obj.scale.y, z: obj.scale.z };
-            const startY = obj.position.y;
-            
-            obj.userData.isAnimating = true;
-            
-            function animate(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3); // Cubic ease out
-                
-                // Update scale
-                obj.scale.x = startScale.x + (targetScale - startScale.x) * ease;
-                obj.scale.y = startScale.y + (targetScale - startScale.y) * ease;
-                obj.scale.z = startScale.z + (targetScale - startScale.z) * ease;
-                
-                // Update position
-                obj.position.y = startY + (targetY - startY) * ease;
-                
-                if (progress < 1) {
-                    obj.userData.animationFrameId = requestAnimationFrame(animate);
-                } else {
-                    obj.userData.isAnimating = false;
-                    if (callback) callback();
-                }
-            }
-            
-            obj.userData.animationFrameId = requestAnimationFrame(animate);
-        }
-        
-        // Show a specific object with smooth transition - Increased scale for STL models
-        function showObject(index) {
-            if (index < 0 || index >= objects.length) return;
-            
-            // Hide current object if any
-            if (currentIndex >= 0 && currentIndex < objects.length && currentIndex !== index) {
-                const prevObj = objects[currentIndex];
-                prevObj.visible = true;
-                
-                // Different animation based on scroll direction
-                if (scrollDirection > 0) {
-                    // Moving down - current object moves up
-                    animateObject(prevObj, 0.5, 5, 800, () => {
-                        prevObj.visible = false;
-                    });
-                } else {
-                    // Moving up - current object moves down
-                    animateObject(prevObj, 0.5, -5, 800, () => {
-                        prevObj.visible = false;
-                    });
-                }
-            }
-            
-            // Show new object
-            const obj = objects[index];
-            obj.visible = true;
-            
-            // Larger scale for all STL models
-            const targetScale = 5.5;  // Increased size from 2 to 3.5
-            
-            if (scrollDirection > 0) {
-                // Coming from below
-                obj.position.y = -5;
-                obj.scale.set(targetScale * 0.5, targetScale * 0.5, targetScale * 0.5);
-            } else {
-                // Coming from above
-                obj.position.y = 5;
-                obj.scale.set(targetScale * 0.5, targetScale * 0.5, targetScale * 0.5);
-            }
-            
-            // Animate to center with appropriate scale
-            animateObject(obj, targetScale, 0, 800);
-            
-            currentIndex = index;
-        }
-        
-        // Smooth scroll handling
-        function updateScrollProgress() {
-            const windowHeight = window.innerHeight;
-            const totalHeight = document.body.scrollHeight;
-            
-            // Calculate how far into the current section we are (0-1)
-            const rawIndex = scrollY / windowHeight - 1;
-            const index = Math.floor(rawIndex);
-            scrollProgress = rawIndex - index;
-            
-            return {
-                index: Math.min(Math.max(index, -1), links.length - 1),
-                progress: scrollProgress
-            };
-        }
-        
-        // Modified scroll handler with looping
-        function handleScroll() {
-            // Get previous position to determine direction
-            prevScrollY = scrollY;
-            scrollY = window.scrollY;
-            
-            // Check if we've reached the bottom of the page
-            if (scrollY + window.innerHeight >= document.body.scrollHeight - 10) {
-                // Loop back to the top (after the landing page)
-                window.scrollTo(0, window.innerHeight);
-                scrollY = window.innerHeight;
-                prevScrollY = 0;
-            }
-            
-            // Determine scroll direction
-            scrollDirection = scrollY > prevScrollY ? 1 : (scrollY < prevScrollY ? -1 : 0);
-            
-            // Affect rotation speed based on scroll intensity
-            const scrollDelta = Math.abs(scrollY - prevScrollY);
-            if (scrollDelta > 10) {
-                rotationSpeed = 2 + scrollDelta / 120; // Increase rotation speed during scroll
-                rotationSpeedResetTime = 0;
-                lastScrollTime = performance.now(); // Track when last scroll occurred
-            }
-            
-            const { index } = updateScrollProgress();
-            
-            // Check if we're scrolling back to the landing page
-            if (index === -1 && currentIndex >= 0) {
-                // Hide current object when returning to landing page
-                const currentObj = objects[currentIndex];
-                currentObj.visible = true;
-                
-                // Animate object moving downward out of view
-                animateObject(currentObj, 0.5, -5, 800, () => {
-                    currentObj.visible = false;
-                });
-                
-                // Reset current index to indicate we're on the landing page
-                currentIndex = -1;
-                return;
-            }
-            
-            // Only change object if we've moved to a new section
-            if (index >= 0 && index !== currentIndex) {
-                targetIndex = index;
-                showObject(targetIndex);
-            }
-            
-            // Update current object position based on scroll progress
-            if (currentIndex >= 0 && currentIndex < objects.length) {
-                const obj = objects[currentIndex];
-                if (obj.visible && !obj.userData.isAnimating) {
-                    // Add subtle movement based on scroll position within section
-                    const windowHeight = window.innerHeight;
-                    const sectionScrollY = scrollY - (windowHeight * (currentIndex + 1));
-                    const normalizedPosition = (sectionScrollY / windowHeight) * 0.5; // Range of movement
-                    
-                    // Small position adjustment based on scroll
-                    obj.position.y = normalizedPosition;
-                }
-            }
-        }
-        
-        // Variables for rotation axis based on mouse position
-        let rotationAxis = new THREE.Vector3(1, 1, 1).normalize();
-        let targetRotationAxis = new THREE.Vector3(1, 1, 1).normalize();
-        
-        // Mouse movement handler with water ripple effect and rotation axis update
-        function handleMouseMove(event) {
-            const prevMouseX = mouseX;
-            const prevMouseY = mouseY;
-            
-            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-            
-            mouse.x = mouseX;
-            mouse.y = mouseY;
-            
-            // Update the rotation axis based on mouse position
-            // This creates a 3D vector pointing from center towards mouse position
-            targetRotationAxis.set(mouseX, mouseY, 1).normalize();
-            
-            // Create water ripple effect (at a throttled rate)
-            if (!lastRippleTime || performance.now() - lastRippleTime > 100) {
-                createRipple(event.clientX, event.clientY);
-                lastRippleTime = performance.now();
-            }
-        }
-        
-        // Click handler
-        function handleClick() {
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(objects);
-            
-            if (intersects.length > 0) {
-                const object = intersects[0].object;
-                if (object.userData.isLink && object.scale.x > 0.5) {
-                    window.open(object.userData.url, '_blank');
-                }
-            }
-        }
-        
-        // Variables for rotation animation
-        let rotationSpeed = 0.5;
-        let defaultRotationSpeed = 0.5; // Store the default rotation speed
-        let rotationSpeedResetTime = 0;
-        let lastRippleTime = 0;
-        let lastScrollTime = 0; // Track when the last scroll event occurred
-        
-        // Enhanced animation loop with mouse-based rotation axis
-        function animate() {
-            const currentTime = performance.now();
-            requestAnimationFrame(animate);
-            
-            // Extra debug for STL visibility
-            if (currentIndex === 0 && objects.length > 0) {
-                const obj = objects[0];
-                if (obj && !obj.debugLogged) {
-                    console.log('STL object in view:', 
-                                'visible=', obj.visible, 
-                                'position=', obj.position.y,
-                                'scale=', obj.scale.x);
-                    obj.debugLogged = true;
-                }
-            }
-            
-            targetX = mouseX * 0.3;
-            targetY = mouseY * 0.3;
-            
-            // More subtle, controlled 3D mouse interactions with models
-            if (currentIndex >= 0 && currentIndex < objects.length) {
-                const obj = objects[currentIndex];
-                if (obj.visible && !obj.userData.isAnimating) {
-                    // Add only subtle tilt based on mouse position
-                    obj.rotation.y = targetX * 0.3;
-                    obj.rotation.x = targetY * -4.0;
-                }
-            }
-            
-            // Handle hover effects
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(objects);
-            
-            document.body.style.cursor = 'default';
-            
-            if (hoveredObject) {
-                linkNameElement.style.opacity = '0';
-                hoveredObject.material.emissive.set(0x000000);
-                hoveredObject = null;
-            }
-            
-            if (intersects.length > 0) {
-                const object = intersects[0].object;
-                if (object.userData.isLink && object.visible && object.scale.x > 0.5) {
-                    document.body.style.cursor = 'pointer';
-                    object.material.emissive.set(0x333333);
-                    linkNameElement.textContent = object.userData.text;
-                    linkNameElement.style.opacity = '1';
-                    hoveredObject = object;
-                }
-            }
-            
-            // Smoothly update the rotation axis
-            rotationAxis.lerp(targetRotationAxis, 0.03);
-            
-            // Gradually reduce rotation speed over time if no scroll activity
-            if (lastScrollTime > 0 && currentTime - lastScrollTime > 300) { // Check if it's been 300ms since last scroll
-                // Calculate how much to decrease the speed based on time since last scroll
-                const decreaseFactor = Math.min(1, (currentTime - lastScrollTime) / 2000); // Takes 2 seconds to fully slow down
-                
-                // Interpolate between current speed and default speed
-                rotationSpeed = rotationSpeed - (rotationSpeed - defaultRotationSpeed) * decreaseFactor * 0.05;
-                
-                // If we're very close to default speed, just set it
-                if (Math.abs(rotationSpeed - defaultRotationSpeed) < 0.05) {
-                    rotationSpeed = defaultRotationSpeed;
-                }
-            }
-            
-            // Rotate particles around axis determined by mouse position
-            const rotationAngle = 0.005 * rotationSpeed;
-            
-            // Apply quaternion rotation around the dynamic axis
-            const quaternion = new THREE.Quaternion();
-            quaternion.setFromAxisAngle(rotationAxis, rotationAngle);
-            particles.quaternion.multiply(quaternion);
-            
-            // Scene subtle rotation based on mouse - smoother with lerping
-            scene.rotation.x += (targetY * 0.05 - scene.rotation.x) * 0.01;
-            scene.rotation.y += (targetX * 0.05 - scene.rotation.y) * 0.01;
-            
-            // Draw water ripples
-            drawRipples();
-            
-            renderer.render(scene, camera);
-        }
-        
-   
-        
-        // Window resize handler with ripple canvas update
-        function handleResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            // Resize ripple canvas
-            rippleCanvas.width = window.innerWidth;
-            rippleCanvas.height = window.innerHeight;
-        }
-        
-        // Right panel toggle functionality
-        const rightPanelToggle = document.getElementById('right-panel-toggle');
-        const rightPanel = document.getElementById('right-panel');
-        
-        rightPanelToggle.addEventListener('click', () => {
-            rightPanel.classList.toggle('collapsed');
-            rightPanelToggle.classList.toggle('collapsed');
-            
-            // Update toggle button content based on state
-            const toggleSpan = rightPanelToggle.querySelector('span');
-            if (rightPanel.classList.contains('collapsed')) {
-                toggleSpan.textContent = '<';
-            } else {
-                toggleSpan.textContent = '>';
-            }
-        });
-        
-        // Handle touch events for mobile with ripple effect and rotation
-        function handleTouchMove(event) {
-            if (event.touches.length > 0) {
-                mouseX = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
-                
-                mouse.x = mouseX;
-                mouse.y = mouseY;
-                
-                // Update rotation axis for touch events too
-                targetRotationAxis.set(mouseX, mouseY, 1).normalize();
-                
-                // Create water ripple effect for touch
-                if (!lastRippleTime || performance.now() - lastRippleTime > 100) {
-                    createRipple(event.touches[0].clientX, event.touches[0].clientY);
-                    lastRippleTime = performance.now();
-                }
-            }
-        }
-        
-        // Event listeners
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('click', handleClick);
-        window.addEventListener('touchmove', handleTouchMove);
-        window.addEventListener('touchstart', handleTouchMove);
-        window.addEventListener('resize', handleResize);
-        
-        // Initialize
-        handleScroll();
-        animate();
-        
-        // Enhanced lighting to better show the white model
-        // Add a new spotlight aimed directly at the center
-        const spotLight = new THREE.SpotLight(0xffffff, 1.5);
-        spotLight.position.set(0, 5, 10);
-        spotLight.angle = Math.PI / 6;
-        spotLight.penumbra = 0.2;
-        spotLight.decay = 0;
-        spotLight.distance = 0;
-        spotLight.target.position.set(0, 0, 0);
-        scene.add(spotLight);
-        scene.add(spotLight.target);
-        
-        // Enhanced lighting specifically for better detail visibility
-        // Add a key light from one side
-        const keyLight = new THREE.DirectionalLight(0xFFFFFF, 1.5);
-        keyLight.position.set(5, 5, 5);
-        scene.add(keyLight);
-        
-        // Add a fill light from the opposite side (softer)
-        const fillLight = new THREE.DirectionalLight(0xFFFFFF, 0.7);
-        fillLight.position.set(-5, 3, 5);
-        scene.add(fillLight);
-        
-        // Add a rim light from behind to highlight edges
-        const rimLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
-        rimLight.position.set(0, -5, -5);
-        scene.add(rimLight);
-        
-        // Add a rotation debug helper function
-        window.rotateModel = function(x, y, z) {
-            if (objects.length > 0) {
-                const obj = objects[0];
-                // Apply fixed rotation (no animation)
-                if (x !== undefined) obj.rotation.x = x;
-                if (y !== undefined) obj.rotation.y = y;
-                if (z !== undefined) obj.rotation.z = z;
-                
-                // Update initial rotation
-                obj.userData.initialRotation = {
-                    x: obj.rotation.x,
-                    y: obj.rotation.y,
-                    z: obj.rotation.z
-                };
-                
-                console.log('Fixed rotation set:', obj.rotation);
-                return obj.rotation;
-            }
-            return null;
-        };
-    </script>
+    }
+
+    init();
+
+</script>
 </body>
 </html>
-
-
