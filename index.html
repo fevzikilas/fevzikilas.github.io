@@ -175,12 +175,17 @@
 
         main {
             flex: 1;
-            background: transparent;
+            background: var(--bg-color-light);
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             margin-top: var(--nav-height);
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode main {
+            background: var(--bg-color-dark);
         }
 
         .iframe-container {
