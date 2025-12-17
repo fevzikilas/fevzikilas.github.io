@@ -50,6 +50,10 @@
             filter: invert(1) hue-rotate(180deg);
         }
 
+        body.dark-mode .iframe-container {
+            filter: invert(1) hue-rotate(180deg);
+        }
+
         nav {
             height: var(--nav-height);
             width: 100%;
@@ -118,7 +122,11 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
             color: #5a6678;
-            display: flex;
+         
+
+        body.dark-mode .sheet-item {
+            color: #a0aec0;
+        }   display: flex;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
@@ -136,7 +144,12 @@
             transition: opacity 0.3s ease;
         }
 
-        .sheet-item:hover {
+        .
+
+        body.dark-mode .sheet-item:hover {
+            background: rgba(159, 134, 255, 0.15);
+            color: #e2e8f0;
+        }sheet-item:hover {
             background: rgba(159, 134, 255, 0.08);
             color: #2d3748;
             transform: translateY(-2px);
