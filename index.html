@@ -4,34 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>fevzi kilas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --nav-height: 60px;
+            --accent-color: #9f86ff;
+            --accent-glow: rgba(159, 134, 255, 0.5);
 
-            
-            --bg-color-light: #fff;
-            --text-color-light: #3c4043;
-            --border-color-light: #dadce0;
-            --active-bg-light: #e8f0fe;
-            --active-text-light: #1967d2;
-            --hover-bg-light: #f1f3f4;
-            --logo-text-light: #202124;
-            --sheet-item-text-light: #5f6368;
+            /* Light Mode Colors */
+            --bg-color-light: #f4f5f7;
+            --nav-bg-light: rgba(255, 255, 255, 0.7);
+            --text-color-light: #2d3748;
+            --border-color-light: #e2e8f0;
+            --active-bg-light: rgba(159, 134, 255, 0.1);
+            --hover-bg-light: rgba(0, 0, 0, 0.04);
+            --logo-text-light: #1a202c;
+            --sheet-item-text-light: #4a5568;
 
-            
-            --bg-color-dark: #202124;
-            --text-color-dark: #e8eaed;
-            --border-color-dark: #3c4043;
-            --active-bg-dark: #313a4c;
-            --active-text-dark: #8ab4f8;
-            --hover-bg-dark: #3c4043;
-            --logo-text-dark: #e8eaed;
-            --sheet-item-text-dark: #bdc1c6;
+            /* Dark Mode Colors */
+            --bg-color-dark: #1a202c;
+            --nav-bg-dark: rgba(26, 32, 44, 0.7);
+            --text-color-dark: #e2e8f0;
+            --border-color-dark: #2d3748;
+            --active-bg-dark: rgba(159, 134, 255, 0.15);
+            --hover-bg-dark: rgba(255, 255, 255, 0.06);
+            --logo-text-dark: #f7fafc;
+            --sheet-item-text-dark: #a0aec0;
         }
 
         body {
             margin: 0;
-            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            font-family: 'Poppins', 'Google Sans', Roboto, Arial, sans-serif;
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -46,48 +51,48 @@
             color: var(--text-color-dark);
         }
 
-        
         nav {
             height: var(--nav-height);
             width: 100%;
-            background: var(--bg-color-light);
+            background: var(--nav-bg-light);
             border-bottom: 1px solid var(--border-color-light);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             flex-shrink: 0;
             z-index: 10;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             padding: 0 24px;
             box-sizing: border-box;
             transition: background 0.3s ease, border-color 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
         }
 
         body.dark-mode nav {
-            background: var(--bg-color-dark);
+            background: var(--nav-bg-dark);
             border-bottom-color: var(--border-color-dark);
         }
 
         .logo {
             font-weight: 700;
-            font-size: 22px;
+            font-size: 24px;
             color: var(--logo-text-light);
             margin-right: 32px;
             white-space: nowrap;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.05);
         }
         
         body.dark-mode .logo {
             color: var(--logo-text-dark);
-        }
-
-        .logo span {
-            color: var(--active-text-light);
-        }
-        body.dark-mode .logo span {
-            color: var(--active-text-dark);
         }
 
         #sheet-list {
@@ -98,7 +103,6 @@
             overflow-y: hidden;
             padding: 0;
             height: 100%;
-            
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
@@ -110,9 +114,10 @@
         .sheet-item {
             padding: 0 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 500;
             border-bottom: 3px solid transparent;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             white-space: nowrap;
             color: var(--sheet-item-text-light);
             display: flex;
@@ -120,7 +125,7 @@
             justify-content: center;
             height: 100%;
             box-sizing: border-box;
-            font-weight: 500;
+            position: relative;
         }
 
         body.dark-mode .sheet-item {
@@ -138,33 +143,27 @@
         }
 
         .sheet-item.active {
+            color: var(--accent-color);
             background: var(--active-bg-light);
-            color: var(--active-text-light);
-            border-bottom-color: var(--active-text-light);
+            border-bottom-color: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
         body.dark-mode .sheet-item.active {
             background: var(--active-bg-dark);
-            color: var(--active-text-dark);
-            border-bottom-color: var(--active-text-dark);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
-        
         main {
             flex: 1;
-            background: var(--bg-color-light);
+            background: transparent;
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: background 0.3s ease;
+            margin-top: var(--nav-height);
         }
 
-        body.dark-mode main {
-            background: var(--bg-color-dark);
-        }
-
-        
         .iframe-container {
             position: absolute;
             top: 0;
@@ -175,7 +174,6 @@
             pointer-events: none;
             transition: opacity 0.2s ease;
             z-index: 0;
-            background: #fff;
             overflow: hidden; 
         }
 
@@ -185,7 +183,6 @@
             z-index: 1;
         }
 
-        
         iframe {
             width: 142.85%;  
             height: 142.85%; 
@@ -194,17 +191,12 @@
             transform: scale(0.7);
             transform-origin: 0 0;
             transition: filter 0.4s ease;
+            background: #fff; /* Ensure iframe bg is white for dark mode filter */
         }
 
         body.dark-mode iframe {
-            filter: invert(0.9) hue-rotate(180deg);
+            filter: brightness(0.8) contrast(1.2);
         }
-
-        body.dark-mode iframe img,
-        body.dark-mode iframe video {
-            filter: invert(1) hue-rotate(180deg);
-        }
-
         
         .status-msg {
             position: absolute;
@@ -234,11 +226,11 @@
             display: block;
         }
 
-        
         .theme-switch-wrapper {
             display: flex;
             align-items: center;
             margin-left: auto;
+            padding-left: 20px;
         }
 
         .theme-switch {
@@ -274,10 +266,11 @@
             transition: .4s;
             width: 16px;
             border-radius: 50%;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
         }
 
         input:checked + .slider {
-            background-color: var(--active-text-dark);
+            background-color: var(--accent-color);
         }
 
         input:checked + .slider:before {
@@ -345,7 +338,7 @@
             }
             
             const data = await response.json();
-            document.title = data.properties.title;
+            // document.title = data.properties.title; // Keep custom title
 
             sheets = (data.sheets || []).map(s => ({
                 title: s.properties.title,
