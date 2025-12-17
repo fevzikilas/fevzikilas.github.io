@@ -43,56 +43,60 @@
             overflow: hidden;
             background: var(--bg-color-light);
             color: var(--text-color-light);
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: filter 0.3s ease;
         }
 
         body.dark-mode {
-            background: var(--bg-color-dark);
-            color: var(--text-color-dark);
+            filter: invert(1) hue-rotate(180deg);
+        }
+
+        body.dark-mode img,
+        body.dark-mode picture,
+        body.dark-mode video,
+        body.dark-mode iframe {
+            filter: invert(1) hue-rotate(180deg);
         }
 
         nav {
             height: var(--nav-height);
             width: 100%;
-            background: var(--nav-bg-light);
-            border-bottom: 1px solid var(--border-color-light);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(250, 250, 255, 0.9) 100%);
+            border-bottom: 1px solid rgba(159, 134, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
             display: flex;
             align-items: center;
             flex-shrink: 0;
             z-index: 10;
-            padding: 0 24px;
+            padding: 0 32px;
             box-sizing: border-box;
-            transition: background 0.3s ease, border-color 0.3s ease;
+            transition: all 0.3s ease;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
         }
 
-        body.dark-mode nav {
-            background: var(--nav-bg-dark);
-            border-bottom-color: var(--border-color-dark);
-        }
-
         .logo {
             font-weight: 700;
-            font-size: 24px;
-            color: var(--logo-text-light);
-            margin-right: 32px;
+            font-size: 26px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-right: 40px;
             white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: color 0.3s ease, transform 0.3s ease;
+            gap: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            filter: drop-shadow(0 2px 8px rgba(159, 134, 255, 0.3));
         }
         .logo:hover {
-            transform: scale(1.05);
-        }
-        
-        body.dark-mode .logo {
-            color: var(--logo-text-dark);
+            transform: scale(1.08) rotate(-2deg);
+            filter: drop-shadow(0 4px 12px rgba(159, 134, 255, 0.5));
         }
 
         #sheet-list {
@@ -112,46 +116,52 @@
         }
 
         .sheet-item {
-            padding: 0 20px;
+            padding: 8px 24px;
+            margin: 0 6px;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
-            border-bottom: 3px solid transparent;
-            transition: all 0.25s ease;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
-            color: var(--sheet-item-text-light);
+            color: #5a6678;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100%;
             box-sizing: border-box;
             position: relative;
+            background: transparent;
         }
 
-        body.dark-mode .sheet-item {
-            color: var(--sheet-item-text-dark);
+        .sheet-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(159, 134, 255, 0.1), rgba(124, 77, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .sheet-item:hover {
-            background: var(--hover-bg-light);
-            color: var(--logo-text-light);
+            background: rgba(159, 134, 255, 0.08);
+            color: #2d3748;
+            transform: translateY(-2px);
         }
 
-        body.dark-mode .sheet-item:hover {
-            background: var(--hover-bg-dark);
-            color: var(--logo-text-dark);
+        .sheet-item:hover::before {
+            opacity: 1;
         }
 
         .sheet-item.active {
-            color: var(--accent-color);
-            background: var(--active-bg-light);
-            border-bottom-color: var(--accent-color);
-            box-shadow: 0 0 15px var(--accent-glow);
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 20px rgba(159, 134, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            transform: translateY(-2px);
         }
 
-        body.dark-mode .sheet-item.active {
-            background: var(--active-bg-dark);
-            box-shadow: 0 0 20px var(--accent-glow);
+        .sheet-item.active::before {
+            opacity: 0;
         }
 
         main {
@@ -190,12 +200,7 @@
             display: block;
             transform: scale(0.7);
             transform-origin: 0 0;
-            transition: filter 0.4s ease;
-            background: #fff; /* Ensure iframe bg is white for dark mode filter */
-        }
-
-        body.dark-mode iframe {
-            filter: brightness(0.8) contrast(1.2);
+            background: #fff;
         }
         
         .status-msg {
@@ -230,14 +235,14 @@
             display: flex;
             align-items: center;
             margin-left: auto;
-            padding-left: 20px;
+            padding-left: 24px;
         }
 
         .theme-switch {
             display: inline-block;
-            height: 24px;
+            height: 32px;
             position: relative;
-            width: 44px;
+            width: 60px;
         }
 
         .theme-switch input {
@@ -245,36 +250,48 @@
         }
 
         .slider {
-            background-color: #ccc;
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
             bottom: 0;
             cursor: pointer;
             left: 0;
             position: absolute;
             right: 0;
             top: 0;
-            transition: .4s;
-            border-radius: 24px;
+            transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 34px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1), inset 0 0 0 2px rgba(255,255,255,0.2);
         }
 
         .slider:before {
-            background-color: #fff;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
             bottom: 4px;
-            content: "";
-            height: 16px;
+            content: "☀️";
+            height: 24px;
             left: 4px;
             position: absolute;
-            transition: .4s;
-            width: 16px;
+            transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 24px;
             border-radius: 50%;
-            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            line-height: 24px;
+            text-align: center;
         }
 
         input:checked + .slider {
-            background-color: var(--accent-color);
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
         }
 
         input:checked + .slider:before {
-            transform: translateX(20px);
+            transform: translateX(28px);
+            content: "🌙";
+        }
+        
+        .slider:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15), inset 0 0 0 2px rgba(255,255,255,0.3);
         }
     </style>
 </head>
