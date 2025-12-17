@@ -55,14 +55,14 @@
             width: calc(100% - 48px);
             max-width: 1400px;
             margin: 12px auto;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 250, 255, 0.98) 100%);
-            border: 1px solid rgba(159, 134, 255, 0.3);
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(31, 41, 55, 0.98) 100%) !important;
+            border: 1px solid rgba(139, 92, 246, 0.3);
             border-radius: 16px;
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 
-                        0 2px 8px rgba(159, 134, 255, 0.15),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 
+                        0 2px 8px rgba(139, 92, 246, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             flex-shrink: 0;
@@ -74,6 +74,7 @@
             top: 0;
             left: 24px;
             right: 24px;
+            filter: none !important;
         }
 
         nav::before {
@@ -83,14 +84,15 @@
             border-radius: 16px;
             padding: 1px;
             background: linear-gradient(135deg, 
-                rgba(159, 134, 255, 0.6) 0%, 
-                rgba(102, 126, 234, 0.4) 50%, 
-                rgba(159, 134, 255, 0.6) 100%);
+                rgba(139, 92, 246, 0.8) 0%, 
+                rgba(167, 139, 250, 0.6) 50%, 
+                rgba(139, 92, 246, 0.8) 100%);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             opacity: 0;
             transition: opacity 0.4s ease;
+            filter: none !important;
         }
 
         nav:hover::before {
@@ -100,7 +102,7 @@
         .logo {
             font-weight: 700;
             font-size: 28px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 40%, #f093fb 80%, #667eea 100%);
+            background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 40%, #e9d5ff 80%, #a78bfa 100%);
             background-size: 200% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -112,7 +114,7 @@
             gap: 8px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            filter: drop-shadow(0 2px 10px rgba(159, 134, 255, 0.4));
+            filter: drop-shadow(0 2px 10px rgba(167, 139, 250, 0.5)) !important;
             animation: gradientShift 8s ease infinite;
             position: relative;
         }
@@ -153,7 +155,7 @@
             border-radius: 10px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
-            color: #64748b;
+            color: #cbd5e1 !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -161,6 +163,7 @@
             position: relative;
             background: transparent;
             border: 1px solid transparent;
+            filter: none !important;
         }
 
         .sheet-item::after {
@@ -177,9 +180,9 @@
         }
 
         .sheet-item:hover {
-            background: linear-gradient(135deg, rgba(159, 134, 255, 0.06), rgba(102, 126, 234, 0.04));
-            color: #475569;
-            border-color: rgba(159, 134, 255, 0.2);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(167, 139, 250, 0.1));
+            color: #e2e8f0 !important;
+            border-color: rgba(139, 92, 246, 0.3);
             transform: translateY(-1px);
         }
 
@@ -188,11 +191,11 @@
         }
 
         .sheet-item.active {
-            color: #fff;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #8b5cf6 100%);
+            color: #fff !important;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #c4b5fd 100%);
             border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4), 
-                        0 2px 8px rgba(118, 75, 162, 0.3),
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.5), 
+                        0 2px 8px rgba(167, 139, 250, 0.4),
                         inset 0 1px 0 rgba(255, 255, 255, 0.2);
             transform: translateY(-1px);
         }
