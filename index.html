@@ -32,6 +32,15 @@
             --hover-bg-dark: rgba(255, 255, 255, 0.06);
             --logo-text-dark: #f7fafc;
             --sheet-item-text-dark: #a0aec0;
+
+            /* Navbar (default: light mode) */
+            --nav-surface: var(--nav-bg-light);
+            --nav-border: var(--border-color-light);
+            --nav-shadow: 0 10px 30px rgba(0, 0, 0, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            --nav-item-color: var(--sheet-item-text-light);
+            --nav-item-hover-bg: var(--hover-bg-light);
+            --nav-item-hover-color: var(--text-color-light);
+            --nav-item-hover-border: rgba(159, 134, 255, 0.22);
         }
 
         body {
@@ -48,6 +57,15 @@
 
         body.dark-mode {
             filter: invert(1) hue-rotate(180deg);
+
+            /* Navbar (dark mode) */
+            --nav-surface: var(--nav-bg-dark);
+            --nav-border: var(--border-color-dark);
+            --nav-shadow: 0 12px 34px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            --nav-item-color: var(--sheet-item-text-dark);
+            --nav-item-hover-bg: var(--hover-bg-dark);
+            --nav-item-hover-color: var(--text-color-dark);
+            --nav-item-hover-border: rgba(159, 134, 255, 0.35);
         }
 
         nav {
@@ -55,14 +73,12 @@
             width: calc(100% - 48px);
             max-width: 1400px;
             margin: 12px auto;
-            background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(31, 41, 55, 0.98) 100%) !important;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: var(--nav-surface) !important;
+            border: 1px solid var(--nav-border);
             border-radius: 16px;
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 
-                        0 2px 8px rgba(139, 92, 246, 0.2),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: var(--nav-shadow);
             display: flex;
             align-items: center;
             flex-shrink: 0;
@@ -75,6 +91,10 @@
             left: 24px;
             right: 24px;
             filter: none !important;
+        }
+
+        nav:hover {
+            transform: translateY(-1px);
         }
 
         nav::before {
@@ -155,7 +175,7 @@
             border-radius: 10px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
-            color: #cbd5e1 !important;
+            color: var(--nav-item-color) !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -180,9 +200,9 @@
         }
 
         .sheet-item:hover {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(167, 139, 250, 0.1));
-            color: #e2e8f0 !important;
-            border-color: rgba(139, 92, 246, 0.3);
+            background: var(--nav-item-hover-bg);
+            color: var(--nav-item-hover-color) !important;
+            border-color: var(--nav-item-hover-border);
             transform: translateY(-1px);
         }
 
