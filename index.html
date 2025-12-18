@@ -34,18 +34,19 @@
             --sheet-item-text-dark: #a0aec0;
 
             /* Navbar (default: light mode) */
-            --nav-surface-top: rgba(255, 255, 255, 0.86);
-            --nav-surface-bottom: rgba(255, 255, 255, 0.62);
-            --nav-shadow: 0 10px 26px rgba(15, 23, 42, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.75);
-            --nav-list-bg: rgba(0, 0, 0, 0.03);
-            --nav-list-border: rgba(159, 134, 255, 0.16);
+            --nav-bg: rgba(255, 255, 255, 0.72);
+            --nav-border: rgba(226, 232, 240, 0.9);
+            --nav-shadow: 0 10px 26px rgba(15, 23, 42, 0.10);
+            --nav-chip-rail-bg: rgba(0, 0, 0, 0.03);
+            --nav-chip-rail-border: rgba(159, 134, 255, 0.14);
+
             --nav-item-color: var(--sheet-item-text-light);
-            --nav-item-hover-bg: rgba(159, 134, 255, 0.12);
-            --nav-item-hover-color: var(--text-color-light);
-            --nav-item-hover-border: rgba(159, 134, 255, 0.28);
-            --nav-item-active-bg: rgba(159, 134, 255, 0.18);
-            --nav-item-active-border: rgba(159, 134, 255, 0.40);
-            --nav-border-color: rgba(159, 134, 255, 0.18);
+            --nav-item-bg: transparent;
+            --nav-item-border: rgba(0, 0, 0, 0.0);
+            --nav-item-hover-bg: rgba(159, 134, 255, 0.10);
+            --nav-item-hover-border: rgba(159, 134, 255, 0.22);
+            --nav-item-active-bg: rgba(159, 134, 255, 0.16);
+            --nav-item-active-border: rgba(159, 134, 255, 0.35);
         }
 
         body {
@@ -64,18 +65,19 @@
             filter: invert(1) hue-rotate(180deg);
 
             /* Navbar (dark mode) */
-            --nav-surface-top: rgba(17, 24, 39, 0.92);
-            --nav-surface-bottom: rgba(17, 24, 39, 0.72);
-            --nav-shadow: 0 14px 34px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-            --nav-list-bg: rgba(255, 255, 255, 0.04);
-            --nav-list-border: rgba(159, 134, 255, 0.22);
+            --nav-bg: rgba(15, 23, 42, 0.86);
+            --nav-border: rgba(45, 55, 72, 0.85);
+            --nav-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+            --nav-chip-rail-bg: rgba(255, 255, 255, 0.04);
+            --nav-chip-rail-border: rgba(159, 134, 255, 0.20);
+
             --nav-item-color: var(--sheet-item-text-dark);
+            --nav-item-bg: transparent;
+            --nav-item-border: rgba(255, 255, 255, 0.0);
             --nav-item-hover-bg: rgba(159, 134, 255, 0.10);
-            --nav-item-hover-color: var(--text-color-dark);
-            --nav-item-hover-border: rgba(159, 134, 255, 0.38);
-            --nav-item-active-bg: rgba(159, 134, 255, 0.20);
-            --nav-item-active-border: rgba(159, 134, 255, 0.48);
-            --nav-border-color: rgba(159, 134, 255, 0.22);
+            --nav-item-hover-border: rgba(159, 134, 255, 0.32);
+            --nav-item-active-bg: rgba(159, 134, 255, 0.18);
+            --nav-item-active-border: rgba(159, 134, 255, 0.42);
         }
 
         /* Cancel out body's invert() so navbar keeps its real dark colors */
@@ -85,28 +87,25 @@
 
         nav {
             height: var(--nav-height);
-            width: calc(100% - 48px);
-            max-width: 1400px;
+            width: calc(100% - 24px);
+            max-width: 1800px;
             margin: 12px auto;
-            border: 1px solid var(--nav-border-color);
-            border-radius: 18px;
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--nav-border);
+            border-radius: 16px;
             box-shadow: var(--nav-shadow);
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
             flex-shrink: 0;
             z-index: 10;
-            padding: 10px 14px;
+            padding: 8px 12px;
             box-sizing: border-box;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: fixed;
             top: 0;
-            left: 24px;
-            right: 24px;
-            /* Surface */
-            background: linear-gradient(180deg, var(--nav-surface-top), var(--nav-surface-bottom));
+            left: 12px;
+            right: 12px;
+            background: var(--nav-bg);
         }
 
         nav:hover {
@@ -116,13 +115,9 @@
 
         .logo {
             font-weight: 700;
-            font-size: 22px;
-            background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 40%, #e9d5ff 80%, #a78bfa 100%);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-right: 6px;
+            font-size: 20px;
+            color: var(--accent-color);
+            margin-right: 4px;
             white-space: nowrap;
             display: flex;
             align-items: center;
@@ -154,9 +149,9 @@
             height: 100%;
             gap: 6px;
             align-items: center;
-            border-radius: 14px;
-            background: var(--nav-list-bg);
-            border: 1px solid var(--nav-list-border);
+            border-radius: 12px;
+            background: var(--nav-chip-rail-bg);
+            border: 1px solid var(--nav-chip-rail-border);
             scrollbar-width: none;
             -ms-overflow-style: none;
 
@@ -185,8 +180,8 @@
             justify-content: center;
             box-sizing: border-box;
             position: relative;
-            background: transparent;
-            border: 1px solid transparent;
+            background: var(--nav-item-bg);
+            border: 1px solid var(--nav-item-border);
             filter: none !important;
             user-select: none;
         }
@@ -197,16 +192,14 @@
 
         .sheet-item:hover {
             background: var(--nav-item-hover-bg);
-            color: var(--nav-item-hover-color) !important;
             border-color: var(--nav-item-hover-border);
             transform: translateY(-1px);
         }
 
         .sheet-item.active {
-            color: var(--nav-item-hover-color) !important;
             background: var(--nav-item-active-bg);
             border-color: var(--nav-item-active-border);
-            box-shadow: 0 10px 20px rgba(159, 134, 255, 0.18);
+            box-shadow: none;
             transform: translateY(-1px);
         }
 
