@@ -45,10 +45,7 @@
             --nav-item-hover-border: rgba(159, 134, 255, 0.28);
             --nav-item-active-bg: rgba(159, 134, 255, 0.18);
             --nav-item-active-border: rgba(159, 134, 255, 0.40);
-            --nav-border-gradient: linear-gradient(90deg,
-                rgba(159, 134, 255, 0.55),
-                rgba(167, 139, 250, 0.32),
-                rgba(159, 134, 255, 0.55));
+            --nav-border-color: rgba(159, 134, 255, 0.18);
         }
 
         body {
@@ -78,10 +75,12 @@
             --nav-item-hover-border: rgba(159, 134, 255, 0.38);
             --nav-item-active-bg: rgba(159, 134, 255, 0.20);
             --nav-item-active-border: rgba(159, 134, 255, 0.48);
-            --nav-border-gradient: linear-gradient(90deg,
-                rgba(159, 134, 255, 0.62),
-                rgba(167, 139, 250, 0.36),
-                rgba(159, 134, 255, 0.62));
+            --nav-border-color: rgba(159, 134, 255, 0.22);
+        }
+
+        /* Cancel out body's invert() so navbar keeps its real dark colors */
+        body.dark-mode nav {
+            filter: invert(1) hue-rotate(180deg) !important;
         }
 
         nav {
@@ -89,7 +88,7 @@
             width: calc(100% - 48px);
             max-width: 1400px;
             margin: 12px auto;
-            border: 1px solid transparent;
+            border: 1px solid var(--nav-border-color);
             border-radius: 18px;
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
@@ -106,17 +105,13 @@
             top: 0;
             left: 24px;
             right: 24px;
-            filter: none !important;
-
-            /* Surface + gradient outline */
-            background:
-                linear-gradient(180deg, var(--nav-surface-top), var(--nav-surface-bottom)) padding-box,
-                var(--nav-border-gradient) border-box;
+            /* Surface */
+            background: linear-gradient(180deg, var(--nav-surface-top), var(--nav-surface-bottom));
         }
 
         nav:hover {
             transform: translateY(-1px);
-            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22), var(--nav-shadow);
+            box-shadow: var(--nav-shadow);
         }
 
         .logo {
@@ -134,7 +129,7 @@
             gap: 8px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            filter: drop-shadow(0 2px 10px rgba(167, 139, 250, 0.5)) !important;
+            filter: none !important;
             position: relative;
         }
         
@@ -145,7 +140,7 @@
         
         .logo:hover {
             transform: translateY(-1px);
-            filter: drop-shadow(0 6px 16px rgba(167, 139, 250, 0.6)) !important;
+            filter: none !important;
         }
 
         #sheet-list {
