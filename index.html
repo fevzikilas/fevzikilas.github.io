@@ -6,83 +6,34 @@
     <title>fevzi kilas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --nav-height: 60px;
-            --accent-color: #9f86ff;
-            --accent-glow: rgba(159, 134, 255, 0.5);
+            --bg: #000;
+            --panel: rgba(0, 0, 0, 0.85);
+            --text: #fff;
+            --muted: rgba(255, 255, 255, 0.70);
+            --border: rgba(255, 255, 255, 0.16);
 
-            /* Light Mode Colors */
-            --bg-color-light: #f4f5f7;
-            --nav-bg-light: rgba(255, 255, 255, 0.7);
-            --text-color-light: #2d3748;
-            --border-color-light: #e2e8f0;
-            --active-bg-light: rgba(159, 134, 255, 0.1);
-            --hover-bg-light: rgba(0, 0, 0, 0.04);
-            --logo-text-light: #1a202c;
-            --sheet-item-text-light: #4a5568;
-
-            /* Dark Mode Colors */
-            --bg-color-dark: #1a202c;
-            --nav-bg-dark: rgba(26, 32, 44, 0.7);
-            --text-color-dark: #e2e8f0;
-            --border-color-dark: #2d3748;
-            --active-bg-dark: rgba(159, 134, 255, 0.15);
-            --hover-bg-dark: rgba(255, 255, 255, 0.06);
-            --logo-text-dark: #f7fafc;
-            --sheet-item-text-dark: #a0aec0;
-
-            /* Navbar (default: light mode) */
-            --nav-bg: rgba(255, 255, 255, 0.72);
-            --nav-border: rgba(226, 232, 240, 0.9);
-            --nav-shadow: 0 10px 26px rgba(15, 23, 42, 0.10);
-            --nav-chip-rail-bg: rgba(0, 0, 0, 0.03);
-            --nav-chip-rail-border: rgba(159, 134, 255, 0.14);
-
-            --nav-item-color: var(--sheet-item-text-light);
+            --nav-bg: var(--panel);
+            --nav-border: var(--border);
             --nav-item-bg: transparent;
-            --nav-item-border: rgba(0, 0, 0, 0.0);
-            --nav-item-hover-bg: rgba(159, 134, 255, 0.10);
-            --nav-item-hover-border: rgba(159, 134, 255, 0.22);
-            --nav-item-active-bg: rgba(159, 134, 255, 0.16);
-            --nav-item-active-border: rgba(159, 134, 255, 0.35);
+            --nav-item-border: rgba(255, 255, 255, 0.18);
+            --nav-item-hover-bg: rgba(255, 255, 255, 0.06);
+            --nav-item-active-bg: rgba(255, 255, 255, 0.12);
+            --nav-item-active-border: rgba(255, 255, 255, 0.50);
         }
 
         body {
             margin: 0;
-            font-family: 'Poppins', 'Google Sans', Roboto, Arial, sans-serif;
+            font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
             display: flex;
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
-            background: #000;
-            color: var(--text-color-light);
-            transition: filter 0.3s ease;
-        }
-
-        body.dark-mode {
-            filter: invert(1) hue-rotate(180deg);
-
-            /* Navbar (dark mode) */
-            --nav-bg: rgba(15, 23, 42, 0.86);
-            --nav-border: rgba(45, 55, 72, 0.85);
-            --nav-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
-            --nav-chip-rail-bg: rgba(255, 255, 255, 0.04);
-            --nav-chip-rail-border: rgba(159, 134, 255, 0.20);
-
-            --nav-item-color: var(--sheet-item-text-dark);
-            --nav-item-bg: transparent;
-            --nav-item-border: rgba(255, 255, 255, 0.0);
-            --nav-item-hover-bg: rgba(159, 134, 255, 0.10);
-            --nav-item-hover-border: rgba(159, 134, 255, 0.32);
-            --nav-item-active-bg: rgba(159, 134, 255, 0.18);
-            --nav-item-active-border: rgba(159, 134, 255, 0.42);
-        }
-
-        /* Cancel out body's invert() so navbar keeps its real dark colors */
-        body.dark-mode nav {
-            filter: invert(1) hue-rotate(180deg) !important;
+            background: var(--bg);
+            color: var(--text);
         }
 
         nav {
@@ -90,61 +41,46 @@
             width: calc(100% - 24px);
             max-width: 1800px;
             margin: 12px auto;
-            border: 1px solid var(--nav-border);
-            border-radius: 16px;
-            box-shadow: var(--nav-shadow);
+            border: none;
+            border-radius: 0;
             display: flex;
             align-items: center;
             gap: 10px;
             flex-shrink: 0;
             z-index: 10;
-            padding: 8px 12px;
+            padding: 0;
             box-sizing: border-box;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: fixed;
             top: 0;
             left: 12px;
             right: 12px;
-            background: var(--nav-bg);
+            background: transparent;
         }
 
-        nav:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--nav-shadow);
-        }
-
-        .logo {
-            font-weight: 700;
-            font-size: 20px;
-            line-height: 1;
-            color: var(--accent-color);
-            margin-right: 4px;
-            white-space: nowrap;
-            display: flex;
+        #nav-scroll-right {
+            height: 40px;
+            width: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: transparent;
+            color: var(--text);
+            border-radius: 10px;
+            display: none;
             align-items: center;
-            gap: 8px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            justify-content: center;
             cursor: pointer;
-            filter: none !important;
-            position: relative;
+            user-select: none;
+            padding: 0;
+            font: inherit;
+            line-height: 1;
         }
 
-        .logo .logo-mark {
-            width: auto;
-            height: 22px;
-            display: block;
-        }
-        
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .logo:hover {
-            transform: translateY(-1px);
-            filter: none !important;
-        }
+        #nav-scroll-right:hover { background: rgba(255, 255, 255, 0.06); }
 
+        #nav-scroll-right:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.65);
+            outline-offset: 2px;
+        }
+        
         #sheet-list {
             flex: 1;
             min-width: 0;
@@ -152,71 +88,55 @@
             flex-direction: row;
             overflow-x: auto;
             overflow-y: hidden;
-            padding: 6px;
+            padding: 0;
             height: 100%;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
-            border-radius: 12px;
-            background: var(--nav-chip-rail-bg);
-            border: 1px solid var(--nav-chip-rail-border);
-            scrollbar-width: none;
-            -ms-overflow-style: none;
 
-            /* subtle scroll fade for many tabs */
-            -webkit-mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent);
-            mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+            /* hide scrollbar (arrow appears on overflow) */
+            scrollbar-width: none;
         }
-        
-        #sheet-list::-webkit-scrollbar { 
-            display: none;
-        }
+
+        #sheet-list::-webkit-scrollbar { height: 0px; }
+        #sheet-list::-webkit-scrollbar-track { background: transparent; }
+        #sheet-list::-webkit-scrollbar-thumb { background: transparent; }
+        #sheet-list::-webkit-scrollbar-corner { background: transparent; }
 
         .sheet-item {
-            padding: 8px 12px;
+            padding: 10px 12px;
             margin: 0;
             cursor: pointer;
             font-size: 12px;
             font-weight: 500;
-            letter-spacing: 0.2px;
-            border-radius: 999px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
-            color: var(--nav-item-color) !important;
-            display: flex;
+            color: var(--text);
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
-            position: relative;
             background: var(--nav-item-bg);
             border: 1px solid var(--nav-item-border);
-            filter: none !important;
+            border-radius: 10px;
             user-select: none;
+            text-align: center;
+            appearance: none;
         }
 
-        .sheet-item::after {
-            display: none;
-        }
-
-        .sheet-item:hover {
-            background: var(--nav-item-hover-bg);
-            border-color: var(--nav-item-hover-border);
-            transform: translateY(-1px);
-        }
+        .sheet-item:hover { background: var(--nav-item-hover-bg); }
 
         .sheet-item.active {
             background: var(--nav-item-active-bg);
             border-color: var(--nav-item-active-border);
-            box-shadow: none;
-            transform: translateY(-1px);
         }
 
-        .sheet-item.active::after {
-            display: none;
+        .sheet-item:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.65);
+            outline-offset: 2px;
         }
 
         main {
             flex: 1;
-            background: var(--bg-color-light);
+            background: var(--bg);
             position: relative;
             overflow: hidden;
             display: flex;
@@ -258,7 +178,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #5f6368;
+            color: var(--muted);
             z-index: 100;
             pointer-events: none;
         }
@@ -266,10 +186,10 @@
         .error-box {
             margin: 20px;
             padding: 20px;
-            background-color: #fce8e6;
-            border: 1px solid #fad2cf;
+            background-color: rgba(0, 0, 0, 0.90);
+            border: 1px solid rgba(255, 255, 255, 0.20);
             border-radius: 8px;
-            color: #c5221f;
+            color: var(--text);
             text-align: left;
             z-index: 100;
             position: relative;
@@ -281,88 +201,14 @@
             display: block;
         }
 
-        .theme-switch-wrapper {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            padding-left: 10px;
-            filter: none !important;
-        }
-
-        .theme-switch {
-            display: inline-block;
-            height: 32px;
-            position: relative;
-            width: 60px;
-            filter: none !important;
-        }
-
-        .theme-switch input {
-            display:none;
-        }
-
-        .slider {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            bottom: 0;
-            cursor: pointer;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 34px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.4);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-        }
-
-        .slider:before {
-            background: linear-gradient(145deg, #ffffff, #f8fafc);
-            bottom: 3px;
-            content: "☀️";
-            height: 26px;
-            left: 3px;
-            position: absolute;
-            transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 26px;
-            border-radius: 50%;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            line-height: 26px;
-            text-align: center;
-        }
-
-        input:checked + .slider {
-            background: linear-gradient(135deg, #4c1d95 0%, #6b21a8 100%);
-            border-color: rgba(139, 92, 246, 0.3);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(28px);
-            content: "🌙";
-        }
-        
-        .slider:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15), inset 0 2px 0 rgba(255,255,255,0.5);
-            transform: scale(1.02);
-        }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo">⛩️</div>
-
     <div id="sheet-list"></div>
 
-    <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
-            <div class="slider"></div>
-        </label>
-    </div>
+    <button id="nav-scroll-right" type="button" aria-label="Scroll tabs right">›</button>
 </nav>
 
 <main id="main-area">
@@ -379,7 +225,8 @@
     const els = {
         sheetList: document.getElementById('sheet-list'),
         main: document.getElementById('main-area'),
-        loadingMsg: document.getElementById('loading-msg')
+        loadingMsg: document.getElementById('loading-msg'),
+        scrollRight: document.getElementById('nav-scroll-right')
     };
 
     let sheets = [];
@@ -387,7 +234,7 @@
     const loadedSheets = new Set();
 
     async function init() {
-        setupTheme();
+        setupNavScroll();
 
         if (CONFIG.publishedId === "YOUR_PUBLISHED_ID_HERE") {
             showError("Configuration Required", "Please update the publishedId.");
@@ -437,13 +284,16 @@
         els.sheetList.innerHTML = '';
         
         sheets.forEach(sheet => {
-            const item = document.createElement('div');
+            const item = document.createElement('button');
             item.className = 'sheet-item';
+            item.type = 'button';
             item.textContent = sheet.title;
             item.dataset.id = sheet.id;
             item.onclick = () => activateSheet(sheet.id);
             els.sheetList.appendChild(item);
         });
+
+        updateScrollArrow();
     }
 
     function activateSheet(gid) {
@@ -463,6 +313,36 @@
         });
 
         els.loadingMsg.style.display = 'none';
+
+        updateScrollArrow();
+    }
+
+    function updateScrollArrow() {
+        const el = els.sheetList;
+        const btn = els.scrollRight;
+        if (!el || !btn) return;
+
+        const hasOverflow = el.scrollWidth > el.clientWidth + 1;
+        const remaining = el.scrollWidth - el.clientWidth - el.scrollLeft;
+        const show = hasOverflow && remaining > 2;
+        btn.style.display = show ? 'inline-flex' : 'none';
+    }
+
+    function setupNavScroll() {
+        if (!els.sheetList || !els.scrollRight) return;
+
+        els.scrollRight.addEventListener('click', () => {
+            const amount = Math.max(240, Math.floor(els.sheetList.clientWidth * 0.8));
+            els.sheetList.scrollBy({ left: amount, behavior: 'smooth' });
+        });
+
+        els.sheetList.addEventListener('scroll', () => {
+            updateScrollArrow();
+        }, { passive: true });
+
+        window.addEventListener('resize', () => {
+            updateScrollArrow();
+        });
     }
 
     function ensureIframe(gid) {
@@ -505,26 +385,6 @@
                 <div>${message}</div>
             </div>
         `;
-    }
-
-    function setupTheme() {
-        const toggle = document.getElementById('checkbox');
-        
-        toggle.addEventListener('change', () => {
-            if (toggle.checked) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme !== 'light') {
-            toggle.checked = true;
-            document.body.classList.add('dark-mode');
-        }
     }
 
     init();
