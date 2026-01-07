@@ -248,7 +248,7 @@
             height: 142.85%; 
             border: none;
             display: block;
-            transform: scale(0.7);
+            transform: scale(0.8);
             transform-origin: 0 0;
             background: #fff;
         }
@@ -472,7 +472,7 @@
         container.className = 'iframe-container';
         container.dataset.id = gid;
 
-        const src = `https://docs.google.com/spreadsheets/d/e/${CONFIG.publishedId}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false`;
+        const src = `https://docs.google.com/spreadsheets/d/e/${CONFIG.publishedId}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false&gridlines=false`;
         
         const iframe = document.createElement('iframe');
         iframe.setAttribute('loading', 'lazy');
