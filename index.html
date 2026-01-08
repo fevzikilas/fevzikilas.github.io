@@ -16,11 +16,6 @@
             --muted: rgba(255, 255, 255, 0.70);
             --border: rgba(255, 255, 255, 0.16);
 
-            /* minimal dark scrollbar palette */
-            --scrollbar-track: rgba(255, 255, 255, 0.06);
-            --scrollbar-thumb: rgba(255, 255, 255, 0.28);
-            --scrollbar-thumb-hover: rgba(255, 255, 255, 0.42);
-
             --nav-bg: var(--panel);
             --nav-border: var(--border);
             --nav-item-bg: transparent;
@@ -40,8 +35,6 @@
             background: var(--bg);
             color: var(--text);
         }
-
-        html { height: 100%; overflow: hidden; }
 
         nav {
             height: var(--nav-height);
@@ -101,10 +94,9 @@
             align-items: center;
 
             scrollbar-width: none;
-            -ms-overflow-style: none; /* IE/Edge legacy */
         }
 
-        #sheet-list::-webkit-scrollbar { height: 0px; display: none; }
+        #sheet-list::-webkit-scrollbar { height: 0px; }
         #sheet-list::-webkit-scrollbar-track { background: transparent; }
         #sheet-list::-webkit-scrollbar-thumb { background: transparent; }
         #sheet-list::-webkit-scrollbar-corner { background: transparent; }
@@ -148,7 +140,6 @@
             flex: 1;
             background: var(--bg);
             position: relative;
-            /* remove outer scrollbars; let iframe handle scrolling */
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -165,7 +156,6 @@
             pointer-events: none;
             transition: opacity 0.2s ease;
             z-index: 0;
-            /* remove outer scrollbars; only the iframe's inner scrolling visible */
             overflow: hidden; 
         }
 
@@ -176,15 +166,15 @@
         }
 
         iframe {
-            width: 100%;
-            height: 100%;
+            width: 142.85%;  
+            height: 142.85%; 
             border: none;
             display: block;
+            transform: scale(0.8);
+            transform-origin: 0 0;
             background: #fff;
             filter: invert(1) hue-rotate(180deg);
         }
-
-        /* Outer scrollbar styling removed to avoid double scrollbars */
         
         .status-msg {
             position: absolute;
