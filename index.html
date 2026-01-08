@@ -15,6 +15,7 @@
             --text: #fff;
             --muted: rgba(255, 255, 255, 0.70);
             --border: rgba(255, 255, 255, 0.16);
+            --iframe-scale: 1;
 
             --nav-bg: var(--panel);
             --nav-border: var(--border);
@@ -166,14 +167,15 @@
         }
 
         iframe {
-            width: 142.85%;  
-            height: 142.85%; 
+            width: calc(100% / var(--iframe-scale));
+            height: calc(100% / var(--iframe-scale));
             border: none;
             display: block;
-            transform: scale(0.8);
+            transform: scale(var(--iframe-scale));
             transform-origin: 0 0;
             background: #fff;
             filter: invert(1) hue-rotate(180deg);
+            will-change: transform;
         }
         
         .status-msg {
@@ -238,6 +240,7 @@
 
     async function init() {
         setupNavScroll();
+        updateIframeScale();
 
         if (CONFIG.publishedId === "YOUR_PUBLISHED_ID_HERE") {
             showError("Configuration Required", "Please update the publishedId.");
@@ -249,6 +252,28 @@
         } catch (err) {
             showError("Initialization Failed", err.message);
         }
+    }
+
+    function updateIframeScale() {
+        const container = els.main;
+        if (!container) return;
+
+        const rect = container.getBoundingClientRect();
+        const w = rect.width || window.innerWidth || 0;
+        const h = rect.height || (window.innerHeight - (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 60)) || 0;
+
+        // Base content size to target (keeps sheets readable while scaling down on small screens)
+        const BASE_W = 1600; // px
+        const BASE_H = 900;  // px
+
+        let s = Math.min(w / BASE_W, h / BASE_H);
+        if (!isFinite(s) || s <= 0) s = 1;
+        // Clamp to avoid over-scaling and extreme downscales
+        s = Math.min(Math.max(s, 0.5), 1);
+        // Round to 2 decimals to reduce layout thrash on continuous resize
+        s = Math.round(s * 100) / 100;
+
+        document.documentElement.style.setProperty('--iframe-scale', String(s));
     }
 
     async function fetchMetadata() {
@@ -317,6 +342,7 @@
         els.loadingMsg.style.display = 'none';
 
         updateScrollArrow();
+        updateIframeScale();
     }
 
     function updateScrollArrow() {
@@ -344,6 +370,7 @@
 
         window.addEventListener('resize', () => {
             updateScrollArrow();
+            updateIframeScale();
         });
     }
 
