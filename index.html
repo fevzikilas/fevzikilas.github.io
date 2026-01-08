@@ -41,6 +41,8 @@
             color: var(--text);
         }
 
+        html { height: 100%; overflow: hidden; }
+
         nav {
             height: var(--nav-height);
             width: calc(100% - 24px);
@@ -99,9 +101,10 @@
             align-items: center;
 
             scrollbar-width: none;
+            -ms-overflow-style: none; /* IE/Edge legacy */
         }
 
-        #sheet-list::-webkit-scrollbar { height: 0px; }
+        #sheet-list::-webkit-scrollbar { height: 0px; display: none; }
         #sheet-list::-webkit-scrollbar-track { background: transparent; }
         #sheet-list::-webkit-scrollbar-thumb { background: transparent; }
         #sheet-list::-webkit-scrollbar-corner { background: transparent; }
