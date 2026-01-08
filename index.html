@@ -16,6 +16,11 @@
             --muted: rgba(255, 255, 255, 0.70);
             --border: rgba(255, 255, 255, 0.16);
 
+            /* minimal dark scrollbar palette */
+            --scrollbar-track: rgba(255, 255, 255, 0.06);
+            --scrollbar-thumb: rgba(255, 255, 255, 0.28);
+            --scrollbar-thumb-hover: rgba(255, 255, 255, 0.42);
+
             --nav-bg: var(--panel);
             --nav-border: var(--border);
             --nav-item-bg: transparent;
@@ -140,10 +145,14 @@
             flex: 1;
             background: var(--bg);
             position: relative;
-            overflow: hidden;
+            /* enable both axes scrolling for the main area */
+            overflow: auto;
             display: flex;
             flex-direction: column;
             margin-top: calc(var(--nav-height) + 24px);
+            /* Firefox scrollbar styling */
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+            scrollbar-width: thin;
         }
 
         .iframe-container {
@@ -156,7 +165,11 @@
             pointer-events: none;
             transition: opacity 0.2s ease;
             z-index: 0;
-            overflow: hidden; 
+            /* allow both axes scrolling inside the active iframe container */
+            overflow: auto; 
+            /* Firefox scrollbar styling */
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+            scrollbar-width: thin;
         }
 
         .iframe-container.active {
@@ -174,6 +187,31 @@
             transform-origin: 0 0;
             background: #fff;
             filter: invert(1) hue-rotate(180deg);
+        }
+
+        /* WebKit-based scrollbar styling (Chrome, Edge, Safari) */
+        main::-webkit-scrollbar, .iframe-container::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        main::-webkit-scrollbar-track, .iframe-container::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 8px;
+        }
+
+        main::-webkit-scrollbar-thumb, .iframe-container::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 8px;
+            border: 2px solid transparent; /* subtle separation */
+        }
+
+        main::-webkit-scrollbar-thumb:hover, .iframe-container::-webkit-scrollbar-thumb:hover {
+            background: var(--scrollbar-thumb-hover);
+        }
+
+        main::-webkit-scrollbar-corner, .iframe-container::-webkit-scrollbar-corner { 
+            background: transparent; 
         }
         
         .status-msg {
