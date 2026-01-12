@@ -338,8 +338,28 @@
                     sheetIndex.set(compositeId, entry);
                 });
             } catch (error) {
-                console.error("Metadata fetch failed for index", i, error);
-                failures.push({ index: i, error });
+                console.warn("Sheets API failed; falling back to published HTML for index", i, error);
+                try {
+                    const pub = await fetchSheetListFromPublished(sp.publishedId);
+                    const spreadsheetTitle = pub.title || `Spreadsheet ${i + 1}`;
+                    pub.sheets.forEach(s => {
+                        const gid = s.gid;
+                        const compositeId = `${i}:${gid}`;
+                        const entry = {
+                            title: s.title,
+                            id: compositeId,
+                            gid,
+                            publishedId: sp.publishedId,
+                            spreadsheetId: sp.spreadsheetId,
+                            spreadsheetTitle
+                        };
+                        sheets.push(entry);
+                        sheetIndex.set(compositeId, entry);
+                    });
+                } catch (fallbackErr) {
+                    console.error("Published HTML fallback failed for index", i, fallbackErr);
+                    failures.push({ index: i, error: fallbackErr });
+                }
             }
         }
 
@@ -351,6 +371,50 @@
         renderNavbar();
         activateSheet(sheets[0].id);
         setTimeout(preloadAllSheets, 2000);
+    }
+
+    async function fetchSheetListFromPublished(publishedId) {
+        const url = `https://docs.google.com/spreadsheets/d/e/${publishedId}/pubhtml?widget=true&chrome=true`;
+        const res = await fetch(url, { credentials: 'omit' });
+        if (!res.ok) throw new Error(`Published fetch error: ${res.status}`);
+        const html = await res.text();
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const title = (doc.querySelector('title')?.textContent || '').trim();
+
+        const items = [];
+        const anchors = Array.from(doc.querySelectorAll('a[href*="gid="]'));
+        const seen = new Set();
+        anchors.forEach(a => {
+            const href = a.getAttribute('href') || '';
+            const m = href.match(/gid=(\d+)/);
+            if (!m) return;
+            const gid = Number(m[1]);
+            if (!Number.isFinite(gid)) return;
+            if (seen.has(gid)) return;
+            const text = (a.textContent || '').trim();
+            if (!text) return;
+            seen.add(gid);
+            items.push({ gid, title: text });
+        });
+
+        // Fallback regex if DOM structure changes
+        if (items.length === 0) {
+            const regex = /<a[^>]+href=\"[^\"]*gid=(\d+)\"[^>]*>([^<]+)<\/a>/gi;
+            const seen2 = new Set();
+            let match;
+            while ((match = regex.exec(html)) !== null) {
+                const gid = Number(match[1]);
+                const text = (match[2] || '').trim();
+                if (!Number.isFinite(gid) || !text || seen2.has(gid)) continue;
+                seen2.add(gid);
+                items.push({ gid, title: text });
+            }
+        }
+
+        if (items.length === 0) throw new Error('Could not parse published sheet list.');
+        return { title, sheets: items };
     }
 
     function renderNavbar() {
